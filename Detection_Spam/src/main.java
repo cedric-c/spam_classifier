@@ -9,15 +9,15 @@ public class main {
 	/* Dictionnaire
 	 * HashMap<mot, ArratList<courriel_ID>>
 	 * Ceci va nous retourner tous les mots du courriel recherché */
-	protected static HashMap<String, ArrayList<String>> dictionnaire_Ham;
-	protected static HashMap<String, ArrayList<String>> dictionnaire_Spam;
+	protected static HashMap<String, ArrayList<String>> dictionnaire_Ham = new HashMap<String, ArrayList<String>>();
+	protected static HashMap<String, ArrayList<String>> dictionnaire_Spam = new HashMap<String, ArrayList<String>>();
 
 	
 	/* Inverted Index 
 	 * HashMap<mot, ArratList<courriel_ID>>
 	 * Ceci va nous retourner une liste de courriel associé au mot cherché */
-	protected static HashMap<String, ArrayList<String>> invertedIndex_Ham;
-	protected static HashMap<String, ArrayList<String>> invertedIndex_Spam;
+	protected static HashMap<String, ArrayList<String>> invertedIndex_Ham = new HashMap<String, ArrayList<String>>();
+	protected static HashMap<String, ArrayList<String>> invertedIndex_Spam = new HashMap<String, ArrayList<String>>();
 	
 	
 	/*
@@ -40,7 +40,7 @@ public class main {
 	    return false;
 	}
 	
-	public void stemming() {
+	public void stemming(String mot) {
 		
 	}
 	
@@ -57,17 +57,25 @@ public class main {
 	 * https://www.geeksforgeeks.org/traverse-through-a-hashmap-in-java/
 	 * */
 	public void traitementDeDonnees(HashMap<String, ArrayList<String>> dictionnaire) throws Exception {
+		
+		String courriel_ID; //get la clé (ID du courriel)
+		ArrayList<String> tokensDuCourriel; //tokens du courriel
+		String token;
+		
 		//itérer à travers de chaque courriel
 		for (Map.Entry mapElement : dictionnaire.entrySet()) { 
-            String courriel_ID = (String)mapElement.getKey(); //get la clé (ID du courriel)
-            ArrayList<String> tokensDuCourriel = dictionnaire.get(courriel_ID); //tokens du courriel
+            courriel_ID = (String)mapElement.getKey(); 
+            tokensDuCourriel = dictionnaire.get(courriel_ID); 
             
             //itérer à travers de chaque tokens dans le courriel
 			for (int j=0; j< tokensDuCourriel.size(); j++) {
 				
-				if(!stopWord(tokensDuCourriel.get(j))) {
-					stemming();
-					construitInvertedIndex();
+				token = tokensDuCourriel.get(j);
+				if(!stopWord(token)) {
+					stemming(token);
+					//construitInvertedIndex();
+				} else {
+					tokensDuCourriel.remove(j); //enlève ce token car c'est un stopWord
 				}
 			}
         } 
@@ -88,41 +96,32 @@ public class main {
 	
 	
 	/*---------------------------------------------------------------------------------------*/
-	public boolean stopWordTEST(String mot) throws Exception {
-	    File file = new File("test.txt"); //lire le fichier contenant les stopwords
-	    Scanner scanner = new Scanner(file); //créer notre scanner
-	    
-	    while (scanner.hasNextLine()) {
-	    	String motDuFichier = scanner.nextLine();
-	    	if (motDuFichier.equals(mot)) {
-	    		System.out.print("stopword trouvé est: "); 
-	    		System.out.println(mot); 
-	    		return true;
-	    	} 
-	    } 
-	   
-	    return false;
+	public void TEST(String mot) throws Exception {
+
 	}
 	/*---------------------------------------------------------------------------------------*/
 	
 	public static void main(String[] args) throws Exception {
 		main a = new main();
 		
-		/*TESTER fonction stopWords()
+		/*TESTER fonction stopWords() */
 		ArrayList<String> cars = new ArrayList<String>();
 		cars.add("Volvo");
 	    cars.add("BMW");
 	    cars.add("Ford");
 	    cars.add("Mazda");
+	    
 	    dictionnaire_Ham.put("automobile", cars);
 	    cars = new ArrayList<String>(); //créer nouvelle liste
-		cars.add("cat");
-	    cars.add("yo");
+		cars.add("xxx");
+	    cars.add("yoo");
 	    cars.add("banane");
 	    cars.add("amarillo");
 	    dictionnaire_Ham.put("random", cars);
-	    a.traitementDeDonnees(dictionnaire_Ham); */
 	    
-	    System.out.println(a.stopWordTEST("cat"));
+	    System.out.print(dictionnaire_Ham); //avant
+	    a.traitementDeDonnees(dictionnaire_Ham); 
+	    System.out.print(dictionnaire_Ham); //après
+	 
 	}	
 }
