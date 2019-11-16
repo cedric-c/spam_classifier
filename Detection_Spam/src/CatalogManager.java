@@ -12,6 +12,7 @@ import java.util.StringTokenizer;
 public class CatalogManager {
     private static String PATH_HAM = "./src/data/ham-and-spam-dataset/ham/";
     private static String PATH_SPAM = "./src/data/ham-and-spam-dataset/spam/";
+    private static String PATH_ENG_STOPWORDS = "./src/data/stopwords/";
 
     private HashMap<String, String> fileDirectories;
 
@@ -19,6 +20,7 @@ public class CatalogManager {
         this.fileDirectories = new HashMap<String, String>();
         this.addDirectory("ham", PATH_HAM);
         this.addDirectory("spam", PATH_SPAM);
+        this.addDirectory("stopwords", PATH_ENG_STOPWORDS);
     }
 
     /**
@@ -54,7 +56,7 @@ public class CatalogManager {
         		for(String line : lines) {
         			StringTokenizer tokens = new StringTokenizer(line);
         			while(tokens.hasMoreTokens()) {
-        				allTokens.add(tokens.nextToken());
+        				allTokens.add(tokens.nextToken().toLowerCase());
         			}
         		}
 //        		lines.sp
