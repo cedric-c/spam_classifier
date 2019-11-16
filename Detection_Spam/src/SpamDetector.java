@@ -8,9 +8,8 @@ public class SpamDetector {
     }
     
     public static void ListFiles() throws IOException{
-        System.out.println("Hello World!");
-        Files.list(Paths.get("../../data"))
-            .forEach(System.out::println);
+        CatalogManager manager = new CatalogManager();
+        manager.ListFiles("spsam");
         
     }
 
