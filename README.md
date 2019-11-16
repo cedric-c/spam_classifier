@@ -4,6 +4,13 @@
 
 1. Preparing Data
     - Need to create _the table_.
+    - Naïve Bayes pre-processing (Smoothing)
+    - k-NN pre-processing.
+        - Load only significant words into memory to conserve space / memory.
+        - Remove stopwords.
+        - Convert case.
+        - Score numeric.
+        - Score $ mentions.
 2. ????
 3. Classify Emails
 4. Stats
@@ -42,6 +49,15 @@
     - Pros: simplicity, any number of classes, adding data is easy.
     - Cons: Prediction cost, poor performance with high dimension data, categorical features don't work well.
 - Onel Harrison. _Machine Learning Basics with the K-Nearest Neighbors Algorithm_. Accessed on 2019-11-16 at `https://towardsdatascience.com/machine-learning-basics-with-the-k-nearest-neighbors-algorithm-6a6e71d01761`. <!--  10/09/2018 --> 
-    - .
+    - Pros: Simplicity, no model, no parameter tuning, versatility (classification, regression, search).
+    - Cons: Slow.
 - Sumit Dua. _Text Classification using K Nearest Neighbors - Towards Data Science_. Accessed on 2019-11-16 at `https://towardsdatascience.com/text-classification-using-k-nearest-neighbors-46fa8a77acc5`. <!--  12/11/2018 -->  
     - .
+- Slides from Catherine
+    - CSI 4107
+        - Machine Learning for IR:
+            - Use standard vector space  inverted index methods to find the k nearest neighbors.
+            - No feature selection required.
+            - No traning required.
+            - Scales well with large number of classes (no need for n classifiers for n classes).
+            - Classes can influence each other.
