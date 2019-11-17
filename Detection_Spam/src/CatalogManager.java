@@ -6,6 +6,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.StringTokenizer;
 
@@ -68,6 +69,29 @@ public class CatalogManager {
         }
         return contents;
 
+    }
+    
+    public HashMap<String, Integer> getOccurences(HashMap<String, List<String>> map, boolean stemmed) {
+        HashMap<String, Integer> occurences = new HashMap<String, Integer>();
+        
+        PorterStemmer stemmer = new PorterStemmer();
+        
+        for(Map.Entry<String, List<String>> entry : map.entrySet()) {
+        	String filename = entry.getKey();
+        	List<String> words = entry.getValue();
+        	words.forEach(word -> {
+        		String stemmedWord = stemmer.stemWord(word);
+        		System.out.println(word + " " + stemmedWord);
+        		String w = stemmed ? stemmedWord : word; 
+        		if(occurences.containsKey(w)) {
+        			occurences.put(w, occurences.get(w) + 1);
+        		} else {
+        			occurences.put(w, 1);
+        		}
+        	});
+        }
+        return occurences;
+        
     }
     
 }
