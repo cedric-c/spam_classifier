@@ -39,7 +39,7 @@ public class CatalogManager {
      * @return
      * @throws IOException
      */
-    public HashMap<String, List<String>> GetContent(String directory) throws IOException{
+    public HashMap<String, List<String>> getMap(String directory) throws IOException{
         String path = this.fileDirectories.get(directory);
         if(path == null)
             throw new IOException("Path does not exist!");
@@ -60,7 +60,6 @@ public class CatalogManager {
         				allTokens.add(tokens.nextToken().toLowerCase());
         			}
         		}
-//        		lines.sp
         		String name = f.getFileName().toString();
         		contents.put(name, allTokens);
         	}catch(Exception e) {
