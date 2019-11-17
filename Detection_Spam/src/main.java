@@ -40,8 +40,11 @@ public class main {
 	    return false;
 	}
 	
-	public void stemming(String mot) {
-		
+	/*
+	 * */
+	public String stemming(String mot) {
+		PorterStemmer stemmer = new PorterStemmer();
+		return stemmer.stemWord(mot);
 	}
 	
 	public void normalisation() {
@@ -72,22 +75,25 @@ public class main {
 				
 				token = tokensDuCourriel.get(j);
 				if(!stopWord(token)) {
-					stemming(token);
+					tokensDuCourriel.set(j, stemming(token));
+					
 					//construitInvertedIndex();
 				} else {
 					tokensDuCourriel.remove(j); //enlève ce token car c'est un stopWord
 				}
 			}
-        } 
+        }
+		System.out.println("HashMap après stemming: " + dictionnaire);
 		
 	}
 	
 	/*
 	 * for each dictionnaire_Ham 
 	 * 		=> (1) if (stopWord) then remove word (--IGNORE stemming et passe au prochain mot)
-	 * 		=> (2) stemming
-	 * 		=> (3) remet le mot dans le arrayList
-	 * 		=> en même temps, commence à construire invertedIndex_Ham
+	 * 				else !stopword
+			 * 		=> (2) stemming
+			 * 		=> (3) remet le mot dans le arrayList
+			 * 		=> en même temps, commence à construire invertedIndex_Ham
 	 * 
 	 * 
 	 * for each dictionnaire_Ham 
@@ -115,7 +121,7 @@ public class main {
 	    cars = new ArrayList<String>(); //créer nouvelle liste
 		cars.add("xxx");
 	    cars.add("yoo");
-	    cars.add("banane");
+	    cars.add("bananeabcdesfh");
 	    cars.add("amarillo");
 	    dictionnaire_Ham.put("random", cars);
 	    
