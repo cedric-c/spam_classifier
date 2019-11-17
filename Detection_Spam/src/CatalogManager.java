@@ -70,6 +70,12 @@ public class CatalogManager {
 
     }
     
+    /**
+     * Return a hash map of words and the number of times they appear in map.
+     * @param map
+     * @param stemmed
+     * @return
+     */
     public HashMap<String, Integer> getOccurences(HashMap<String, List<String>> map, boolean stemmed) {
         HashMap<String, Integer> occurences = new HashMap<String, Integer>();
         
