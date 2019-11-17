@@ -81,7 +81,6 @@ public class CatalogManager {
         	List<String> words = entry.getValue();
         	words.forEach(word -> {
         		String stemmedWord = stemmer.stemWord(word);
-        		System.out.println(word + " " + stemmedWord);
         		String w = stemmed ? stemmedWord : word; 
         		if(occurences.containsKey(w)) {
         			occurences.put(w, occurences.get(w) + 1);
