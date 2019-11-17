@@ -9,6 +9,7 @@ import javax.xml.bind.DatatypeConverter;
 import java.util.Base64;
 import java.io.*;
 import java.util.List;
+import java.util.ArrayList;
 
 public class SimpleIO{
     
@@ -45,6 +46,10 @@ public class SimpleIO{
         List<String> content = Files.readAllLines(Paths.get(path));
         String ret           = String.join("\n", content);
         return ret;
+    }
+    
+    public static ArrayList<String> readStringsFromFile(String path) throws IOException, FileNotFoundException {
+    	return (ArrayList<String>) Files.readAllLines(Paths.get(path));
     }
     
     /**

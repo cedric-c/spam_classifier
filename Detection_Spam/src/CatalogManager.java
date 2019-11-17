@@ -39,7 +39,7 @@ public class CatalogManager {
      * @return
      * @throws IOException
      */
-    public HashMap<String, List<String>> getMap(String directory) throws IOException{
+    public HashMap<String, ArrayList<String>> getMap(String directory) throws IOException{
         String path = this.fileDirectories.get(directory);
         if(path == null)
             throw new IOException("Path does not exist!");
@@ -49,11 +49,11 @@ public class CatalogManager {
         ArrayList<Path> paths = Files.list(p)
         		.collect(Collectors.toCollection(ArrayList::new));
         		
-        HashMap<String, List<String>> contents = new HashMap<String, List<String>>();
+        HashMap<String, ArrayList<String>> contents = new HashMap<String, ArrayList<String>>();
         for(Path f : paths) {
         	try {
-        		List<String> lines = Files.readAllLines(f, Charset.forName("Cp1252"));
-        		List<String> allTokens = new ArrayList<String>();
+        		ArrayList<String> lines = (ArrayList<String>) Files.readAllLines(f, Charset.forName("Cp1252"));
+        		ArrayList<String> allTokens = new ArrayList<String>();
         		for(String line : lines) {
         			StringTokenizer tokens = new StringTokenizer(line);
         			while(tokens.hasMoreTokens()) {
@@ -76,14 +76,14 @@ public class CatalogManager {
      * @param stemmed
      * @return
      */
-    public HashMap<String, Integer> getOccurences(HashMap<String, List<String>> map, boolean stemmed) {
+    public HashMap<String, Integer> getOccurences(HashMap<String, ArrayList<String>> map, boolean stemmed) {
         HashMap<String, Integer> occurences = new HashMap<String, Integer>();
         
         PorterStemmer stemmer = new PorterStemmer();
         
-        for(Map.Entry<String, List<String>> entry : map.entrySet()) {
+        for(Map.Entry<String, ArrayList<String>> entry : map.entrySet()) {
         	String filename = entry.getKey();
-        	List<String> words = entry.getValue();
+        	ArrayList<String> words = entry.getValue();
         	words.forEach(word -> {
         		String stemmedWord = stemmer.stemWord(word);
         		String w = stemmed ? stemmedWord : word; 

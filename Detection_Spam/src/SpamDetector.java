@@ -9,9 +9,9 @@ public class SpamDetector {
     
 	public static void main(String[] args) throws IOException{
         CatalogManager manager = new CatalogManager();
-        HashMap<String, List<String>> spam = manager.getMap("spam");
-        HashMap<String, List<String>> ham  = manager.getMap("ham");
-        HashMap<String, List<String>> stops = manager.getMap("stopwords");
+        HashMap<String, ArrayList<String>> spam = manager.getMap("spam");
+        HashMap<String, ArrayList<String>> ham  = manager.getMap("ham");
+        HashMap<String, ArrayList<String>> stops = manager.getMap("stopwords");
         List<String> englishStopwords = stops.get("english.txt");
         List<String> emailStopwords = stops.get("email.txt");
         List<String> sample_ham = ham.get("2186.9dc59321a95e53d5e0ebaf3524858913");
@@ -23,7 +23,21 @@ public class SpamDetector {
 //        	System.out.println(s + " " +stemmed + " ");
 //        }
 
+        CSVLoader csv = new CSVLoader("./src/data/iris/sample.csv");
+        csv.load().tabulate(true);
+        String[] row1 = csv.get(0);
         
+        KNN knn = new KNN();
+        
+//        for(String[] xi : csv.data()) {
+//        	double d = knn.distance(row1, xi);
+//        	System.out.println("distance is " + d);
+//        }
+        
+        // Note that nearestNeighbors are not sorted
+        HashMap<String[], Double> nearestNeighbors = knn.getNeighbors(row1, csv.data(), 5);
+        System.out.println("hello");
+        System.exit(0);
         
         HashMap<String, Integer> occurences = manager.getOccurences(spam, false);
 		OutputOccurencesCSV("./src/out/spam_occurences.csv", occurences);
@@ -62,12 +76,13 @@ public class SpamDetector {
 		 	.filter(item -> item.getValue() > 3000)
 		    .forEach(System.out::println);
 		
-		System.out.println("\nOccurences >= 3000 AND no stopwords from 'english.txt' or 'email.txt'");
+		System.out.println("\nOccurences >= 200 AND no stopwords from 'english.txt' or 'email.txt'");
 		occurences.entrySet()
 	 		.stream()
 	 		.filter(item -> !englishStopwords.contains(item.getKey())) // see stopwords above
 	 		.filter(item -> !emailStopwords.contains(item.getKey())) // see stopwords above
-	 		.filter(item -> item.getValue() > 3000)
+	 		.filter(item -> item.getValue() > 250)
+	 		.filter(item -> item.getValue() < 350)
 	 		.forEach(System.out::println);
     }
 	
