@@ -31,8 +31,7 @@ public class main {
 	    while (scanner.hasNextLine()) {
 	    	String motDuFichier = scanner.nextLine();
 	    	if (motDuFichier.equals(mot)) {
-	    		System.out.print("stopword trouvé est: "); 
-	    		System.out.println(mot); 
+	    		//System.out.println("stopword trouvé est: " + mot); 
 	    		return true;
 	    	} 
 	    } 
@@ -41,6 +40,7 @@ public class main {
 	}
 	
 	/*
+	 * Appel la fonction stemWord de la classe PorterStemmer
 	 * */
 	public String stemming(String mot) {
 		PorterStemmer stemmer = new PorterStemmer();
@@ -51,19 +51,35 @@ public class main {
 		
 	}
 	
-	public void construitInvertedIndex() {
+	/*
+	 * String key: clé du hashMap invertedIndex (la clé est un mot/token)
+	 * HashMap<String, ArrayList<String>> invertedIndex: inverted index sous forme d'un hashMap. Variable globale statique défini dans cette classe
+	 * String courriel_ID: courriel qu'on veut associé à la clé (arg key) dans le hashMap invertedIndex
+	 * */
+	public void construitInvertedIndex(String key, HashMap<String, ArrayList<String>> invertedIndex, String courriel_ID) {
 		
+		ArrayList<String> listeDeCourrielID = new ArrayList<String>();
+		
+		if (invertedIndex.containsKey(key)) {
+			listeDeCourrielID = invertedIndex.get(key);
+			listeDeCourrielID.add(courriel_ID);
+			invertedIndex.put(courriel_ID, listeDeCourrielID);
+			
+		} else { //ajoute un nouveau mot comme clé
+			listeDeCourrielID.add(courriel_ID);
+			invertedIndex.put(key, listeDeCourrielID);
+		}
 	}
 	
 	/*
 	 * Inspirer de ce site web pour itérer à travers d'un hashmap
 	 * https://www.geeksforgeeks.org/traverse-through-a-hashmap-in-java/
 	 * */
-	public void traitementDeDonnees(HashMap<String, ArrayList<String>> dictionnaire) throws Exception {
+	public void traitementDeDonnees(HashMap<String, ArrayList<String>> dictionnaire, HashMap<String, ArrayList<String>> invertedIndex) throws Exception {
 		
 		String courriel_ID; //get la clé (ID du courriel)
 		ArrayList<String> tokensDuCourriel; //tokens du courriel
-		String token;
+		String token, stemToken;
 		
 		//itérer à travers de chaque courriel
 		for (Map.Entry mapElement : dictionnaire.entrySet()) { 
@@ -75,30 +91,16 @@ public class main {
 				
 				token = tokensDuCourriel.get(j);
 				if(!stopWord(token)) {
-					tokensDuCourriel.set(j, stemming(token));
-					
-					//construitInvertedIndex();
+					stemToken = stemming(token);
+					tokensDuCourriel.set(j, stemToken); //stem le mot
+					construitInvertedIndex(stemToken, invertedIndex, courriel_ID); //ajoute le mot et courriel_ID dans invertedIndex
 				} else {
 					tokensDuCourriel.remove(j); //enlève ce token car c'est un stopWord
 				}
 			}
-        }
-		System.out.println("HashMap après stemming: " + dictionnaire);
+        } 
 		
 	}
-	
-	/*
-	 * for each dictionnaire_Ham 
-	 * 		=> (1) if (stopWord) then remove word (--IGNORE stemming et passe au prochain mot)
-	 * 				else !stopword
-			 * 		=> (2) stemming
-			 * 		=> (3) remet le mot dans le arrayList
-			 * 		=> en même temps, commence à construire invertedIndex_Ham
-	 * 
-	 * 
-	 * for each dictionnaire_Ham 
-	 * 		=>
-	 * */
 	
 	
 	/*---------------------------------------------------------------------------------------*/
@@ -112,22 +114,24 @@ public class main {
 		
 		/*TESTER fonction stopWords() */
 		ArrayList<String> cars = new ArrayList<String>();
-		cars.add("Volvo");
-	    cars.add("BMW");
 	    cars.add("Ford");
-	    cars.add("Mazda");
-	    
+	    cars.add("started");
+	    cars.add("day");
 	    dictionnaire_Ham.put("automobile", cars);
+	    
 	    cars = new ArrayList<String>(); //créer nouvelle liste
-		cars.add("xxx");
+		cars.add("September");
 	    cars.add("yoo");
-	    cars.add("bananeabcdesfh");
-	    cars.add("amarillo");
+	    cars.add("started");
+	    cars.add("course");
 	    dictionnaire_Ham.put("random", cars);
 	    
-	    System.out.print(dictionnaire_Ham); //avant
-	    a.traitementDeDonnees(dictionnaire_Ham); 
-	    System.out.print(dictionnaire_Ham); //après
-	 
+	    System.out.println("Dictionnaire avant: " + dictionnaire_Ham); //avant
+	    a.traitementDeDonnees(dictionnaire_Ham, invertedIndex_Ham); 
+	    System.out.println("Dictionnaire stemmed: " + dictionnaire_Ham); //après
+	    
+	    System.out.println("");
+	    System.out.println("Inverted Index: " + invertedIndex_Ham);
+	    	
 	}	
 }
