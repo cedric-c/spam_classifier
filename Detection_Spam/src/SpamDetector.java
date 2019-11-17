@@ -8,9 +8,9 @@ public class SpamDetector {
     
 	public static void main(String[] args) throws IOException{
         CatalogManager manager = new CatalogManager();
-        HashMap<String, List<String>> spam = manager.GetContent("spam");
-        HashMap<String, List<String>> ham  = manager.GetContent("ham");
-        HashMap<String, List<String>> stops = manager.GetContent("stopwords");
+        HashMap<String, List<String>> spam = manager.getMap("spam");
+        HashMap<String, List<String>> ham  = manager.getMap("ham");
+        HashMap<String, List<String>> stops = manager.getMap("stopwords");
         List<String> stopwords = stops.get("english.txt");
         List<String> sample_ham = ham.get("2186.9dc59321a95e53d5e0ebaf3524858913");
         
@@ -23,10 +23,10 @@ public class SpamDetector {
         
         HashMap<String, Integer> occurences = manager.getOccurences(spam, false);
         
-        occurences.values()
-        	.stream()
-        	.sorted(Comparator.reverseOrder())
-        	.forEach(System.out::println);
+//        occurences.values()
+//        	.stream()
+//        	.sorted(Comparator.reverseOrder())
+//        	.forEach(System.out::println);
         
         occurences.entrySet()
     		.stream()
@@ -34,6 +34,7 @@ public class SpamDetector {
     			String word = set.getKey();
     			Integer numOccurences = set.getValue();
     			String out = word + ", " + numOccurences;
+    			out = word;
     			System.out.println(out);
     		});
         
