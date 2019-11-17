@@ -57,7 +57,7 @@ public class CatalogManager {
         		for(String line : lines) {
         			StringTokenizer tokens = new StringTokenizer(line);
         			while(tokens.hasMoreTokens()) {
-        				allTokens.add(tokens.nextToken().toLowerCase());
+        				allTokens.add(tokens.nextToken().toLowerCase().trim());
         			}
         		}
         		String name = f.getFileName().toString();

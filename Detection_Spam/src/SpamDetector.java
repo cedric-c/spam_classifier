@@ -12,7 +12,8 @@ public class SpamDetector {
         HashMap<String, List<String>> spam = manager.getMap("spam");
         HashMap<String, List<String>> ham  = manager.getMap("ham");
         HashMap<String, List<String>> stops = manager.getMap("stopwords");
-        List<String> stopwords = stops.get("english.txt");
+        List<String> englishStopwords = stops.get("english.txt");
+        List<String> emailStopwords = stops.get("email.txt");
         List<String> sample_ham = ham.get("2186.9dc59321a95e53d5e0ebaf3524858913");
         
         PorterStemmer stemmer = new PorterStemmer();
@@ -52,17 +53,22 @@ public class SpamDetector {
 			.filter(item -> item.getValue() >= 3000)
 			.forEach(System.out::println);
 		
-		ArrayList<String> remove = new ArrayList<String>();
-		remove.add("by");
-		remove.add("of");
-		remove.add("to");
-		System.out.println("\nOccurences >= 3000 AND does NOT contain 'by', 'of', 'to' :");
+
+		// Stopword filters
+		System.out.println("\nOccurences >= 3000 AND does NOT contain stopwords from 'english.txt':");
 		occurences.entrySet()
 		 	.stream()
-		 	.filter(item -> !remove.contains(item.getKey()))
+		 	.filter(item -> !englishStopwords.contains(item.getKey())) // see stopwords above
 		 	.filter(item -> item.getValue() > 3000)
 		    .forEach(System.out::println);
 		
+		System.out.println("\nOccurences >= 3000 AND no stopwords from 'english.txt' or 'email.txt'");
+		occurences.entrySet()
+	 		.stream()
+	 		.filter(item -> !englishStopwords.contains(item.getKey())) // see stopwords above
+	 		.filter(item -> !emailStopwords.contains(item.getKey())) // see stopwords above
+	 		.filter(item -> item.getValue() > 3000)
+	 		.forEach(System.out::println);
     }
 	
 	/**	
