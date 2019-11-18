@@ -19,16 +19,16 @@ public class NaiveBayes {
 	 * test_set: ensemble de courriels non-classfiés
 	 * 
 	 * */
-	protected static HashMap<String, ArrayList<String>> dictionnaire_Ham; //clé:courriel ; valeur:tokens après le traitement de données
-	protected static HashMap<String, ArrayList<String>> dictionnaire_Spam;
+	protected static HashMap<String, ArrayList<String>> dictionnaire_Ham; //clé:courriel ham de l'ensemble d'entrainement ; valeur:tokens après le traitement de données
+	protected static HashMap<String, ArrayList<String>> dictionnaire_Spam; //clé:courriel spam de l'ensemble d'entrainement ; valeur:tokens après le traitement de données
 	
-	protected static HashMap<String, ArrayList<String>> invertedIndex_Ham; //inverted index
-	protected static HashMap<String, ArrayList<String>> invertedIndex_Spam;
+	protected static HashMap<String, ArrayList<String>> invertedIndex_Ham; //inverted index basé sur les courriels ham
+	protected static HashMap<String, ArrayList<String>> invertedIndex_Spam; //inverted index basé sur les courriels ham
 	
-	protected static HashMap<String, ArrayList<String>> classifier_Ham_Test; //classifier courriel dans
-	protected static HashMap<String, ArrayList<String>> classifier_Spam_Test;
+	protected static HashMap<String, ArrayList<String>> classifier_Ham_Test; //courriel de l'ensemble test à été classifié en tant que ham
+	protected static HashMap<String, ArrayList<String>> classifier_Spam_Test; //courriel de l'ensemble test à été classifié en tant que spam
 	
-	protected static HashMap<String, ArrayList<String>> test_set; //clé:courriel ; valeur:tokens après le traitement de données
+	protected static HashMap<String, ArrayList<String>> test_set; //clé:courriel de l'ensemble test (pas encore classifié); valeur:tokens après le traitement de données
 	
 
 	NaiveBayes(HashMap<String, ArrayList<String>> dictionnaire_Ham, HashMap<String, ArrayList<String>> dictionnaire_Spam,
@@ -109,8 +109,11 @@ public class NaiveBayes {
 			//compare les probabilités et prendre celui qui est la plus grande
 			if (probSpam > probHam) {
 				classifier_Spam_Test.put(courriel_ID, tokensDuCourriel);
-			} else {
+			} else if (probSpam < probHam){
 				classifier_Ham_Test.put(courriel_ID, tokensDuCourriel);
+			} else {
+				System.out.print("probSpam == probHam: " + courriel_ID);
+				classifier_Spam_Test.put(courriel_ID, tokensDuCourriel); //si il n'y a pas de prob max, on va supposé aléatoirement que c'est un spam
 			}
 		}
 		
