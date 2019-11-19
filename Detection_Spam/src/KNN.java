@@ -75,4 +75,35 @@ public class KNN {
 		
 		return this.sortedK;
 	}
+	
+	public String predict(String[] X1) {
+		int same = 0, different = 0;
+//		this.sortedK
+//			.entrySet()
+//			.stream()
+//			.forEach(action);
+
+		int labelIndex = X1.length -1;
+		String label = X1[labelIndex];
+		
+		for(Map.Entry<String[], Double> entry : this.sortedK.entrySet()) {
+			String[] row = entry.getKey();
+			Double value = entry.getValue();
+			if(row[labelIndex].equals(label)) {
+				same++;
+			} else {
+				different++;
+			}
+			
+		}
+		
+		System.out.println("Sample Label is "+ label + " same: " + same + " different: "+ different);
+		
+//		Map<Object, Long> result = this.sortedK
+//			.entrySet()
+//			.stream()
+//			.collect(Collectors.groupingBy(e -> e, Collectors.counting()));
+		
+		return "hi";
+	}
 }
