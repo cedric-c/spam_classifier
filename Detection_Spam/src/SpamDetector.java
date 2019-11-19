@@ -11,6 +11,7 @@ public class SpamDetector {
         CatalogManager manager = new CatalogManager();
         HashMap<String, ArrayList<String>> spam = manager.getMap("spam");
         HashMap<String, ArrayList<String>> ham  = manager.getMap("ham");
+        //HashMap<String, ArrayList<String>> test  = manager.getMap("test"); //MODIFIER: ajouter cette ligne
         HashMap<String, ArrayList<String>> stops = manager.getMap("stopwords");
         List<String> englishStopwords = stops.get("english.txt");
         List<String> emailStopwords = stops.get("email.txt");
