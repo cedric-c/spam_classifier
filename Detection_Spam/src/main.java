@@ -33,10 +33,11 @@ public class main {
 	    	String motDuFichier = scanner.nextLine();
 	    	if (motDuFichier.equals(mot)) {
 	    		//System.out.println("stopword trouvé est: " + mot); 
+	    		scanner.close();
 	    		return true;
 	    	} 
-	    } 
-	   
+	    }
+	    scanner.close();
 	    return false;
 	}
 	

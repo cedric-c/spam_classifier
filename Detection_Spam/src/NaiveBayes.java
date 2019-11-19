@@ -112,7 +112,7 @@ public class NaiveBayes {
 			} else if (probSpam < probHam){
 				classifier_Ham_Test.put(courriel_ID, tokensDuCourriel);
 			} else {
-				System.out.print("probSpam == probHam: " + courriel_ID);
+				System.out.println("probSpam == probHam: " + courriel_ID);
 				classifier_Spam_Test.put(courriel_ID, tokensDuCourriel); //si il n'y a pas de prob max, on va supposé aléatoirement que c'est un spam
 			}
 		}
