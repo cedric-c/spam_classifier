@@ -13,14 +13,13 @@ public class KNN {
 	}
 	
 	/**
-	 * Calculates the Euclidean distances between two CSV rows.
-	 * @param X1
-	 * @param X2
+	 * Calculates the Euclidean distances between two CSV rows, X1, X2.
+	 * @param X1 sample1
+	 * @param X2 sample2
 	 * @return
 	 */
 	public double distance(String[] X1, String[] X2) {
 		int dims = X1.length;
-		
 		String[] returnVector = new String[3]; // X1 X2 same class
 		double distance = 0.0;
 		
@@ -55,17 +54,6 @@ public class KNN {
         	distances.add(d);
         }
 		
-//		results.values()
-//			.stream()
-//			.sorted()
-//			.limit(K)
-//			.forEach(System.out::println);
-//		
-//		results.entrySet()
-//			.stream()
-//			.sorted(Map.Entry.comparingByValue())
-//			.forEach(System.out::println);
-		
 		this.sortedK = results.entrySet()
 			.stream()
 			.sorted(Map.Entry.comparingByValue())
@@ -76,12 +64,32 @@ public class KNN {
 		return this.sortedK;
 	}
 	
+	/**
+	 * 
+	 * @param X1
+	 * @param dataset
+	 * @param K
+	 * @return
+	 */
+	public HashMap<String[], Double> getNeighbors(String[] X1, ArrayList<String[]> dataset, int K) {
+		ArrayList<Double> distances = new ArrayList<Double>();
+		HashMap<String[], Double> results = new HashMap<String[], Double>();
+		for(String[] xi : dataset) {
+			double d = this.distance(X1, xi);
+			results.put(xi, d);
+			distances.add(d);
+		}
+		
+		return this.sortedK = results.entrySet()
+				.stream()
+				.sorted(Map.Entry.comparingByValue())
+				.limit(K)
+				.collect(Collectors.toMap(Map.Entry::getKey,  Map.Entry::getValue,(e1, e2) -> e2, HashMap::new));
+		
+	}
+	
 	public String predict(String[] X1) {
 		int same = 0, different = 0;
-//		this.sortedK
-//			.entrySet()
-//			.stream()
-//			.forEach(action);
 
 		int labelIndex = X1.length -1;
 		String label = X1[labelIndex];
@@ -96,6 +104,7 @@ public class KNN {
 			}
 			
 		}
+		
 		
 		System.out.println("Sample Label is "+ label + " same: " + same + " different: "+ different);
 		

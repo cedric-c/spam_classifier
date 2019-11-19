@@ -27,6 +27,7 @@ public class SpamDetector {
         CSVLoader csv = new CSVLoader("./src/data/iris/iris.csv");
         csv.load().tabulate(true);
         String[] row1 = csv.get(0);
+        HashMap<Double, ArrayList<String[]>> data = csv.split(0.1, 0.9);
         
         KNN knn = new KNN();
         
@@ -36,8 +37,13 @@ public class SpamDetector {
 //        }
         
         // Note that nearestNeighbors are not sorted
-        HashMap<String[], Double> nearestNeighbors = knn.getNeighbors(row1, csv.data(), 5);
-        knn.predict(row1);
+        ArrayList<String[]> training = data.get(0.1);
+        ArrayList<String[]> testing  = data.get(0.9);
+        
+        for(String[] sample : testing) {        	
+        	HashMap<String[], Double> nearestNeighbors = knn.getNeighbors(sample, training, 4);
+        	knn.predict(sample);
+        }
         System.out.println("hello");
         System.exit(0);
         
