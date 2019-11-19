@@ -115,8 +115,8 @@ public class main {
 		
 		main a = new main();
 		CatalogManager manager = new CatalogManager();
-		dictionnaire_Spam = manager.getMap("spam");
-        dictionnaire_Ham  = manager.getMap("ham");
+		dictionnaire_Spam = manager.getMap("spam", 400);
+        dictionnaire_Ham  = manager.getMap("ham", 600);
         test_set  = manager.getMap("test"); //MODIFIER: ajouter cette ligne
         
         System.out.println("dictionnaire_Spam: " + dictionnaire_Spam.size());
@@ -126,7 +126,7 @@ public class main {
         a.traitementDeDonnees(dictionnaire_Spam, invertedIndex_Spam);
         
         NaiveBayes nb = new NaiveBayes(dictionnaire_Ham, dictionnaire_Spam, invertedIndex_Ham, invertedIndex_Spam, test_set);
-        nb.classifierNB(false); //pas de lissage
+        nb.classifierNB(true); //pas de lissage
         
         HashMap<String, ArrayList<String>> classifier_Ham_Test = nb.getClassifier_Ham_Test();
         HashMap<String, ArrayList<String>> classifier_Spam_Test = nb.getClassifier_Spam_Test();

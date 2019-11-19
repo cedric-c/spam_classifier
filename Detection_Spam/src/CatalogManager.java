@@ -11,8 +11,8 @@ import java.util.stream.Collectors;
 import java.util.StringTokenizer;
 
 public class CatalogManager {
-    private static String PATH_HAM = "./src/test_data_CAT/ham-and-spam-dataset/ham/";
-    private static String PATH_SPAM = "./src/test_data_CAT/ham-and-spam-dataset/spam/";
+    private static String PATH_HAM = "./src/data/ham-and-spam-dataset/ham/";
+    private static String PATH_SPAM = "./src/data/ham-and-spam-dataset/spam/";
     private static String PATH_NON_CLASSIFIED = "./src/test_data_CAT/ham-and-spam-dataset/test_set"; //MODIFIER: l'ensemble test qui n'a pas été classifié
     private static String PATH_ENG_STOPWORDS = "./src/data/stopwords/";
 
@@ -69,6 +69,25 @@ public class CatalogManager {
         	
         }
         return contents;
+
+    }
+    
+    /**
+     * Returns records, up to a maximum of limit
+     * @param directory
+     * @param limit
+     * @return
+     * @throws IOException
+     */
+    public HashMap<String, ArrayList<String>> getMap(String directory, int limit) throws IOException{
+        return this.getMap(directory)
+        	.entrySet()
+        	.stream()
+        	.limit(limit)
+        	.collect(
+    				Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, 
+    						(e1, e2) -> e2, HashMap::new)
+    		);
 
     }
     

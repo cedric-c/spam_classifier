@@ -105,7 +105,7 @@ public class NaiveBayes {
 			//appeler calculateProbabilty pour calculer les prob conditionelles
 			probSpam = calculateProbability(tokensDuCourriel, invertedIndex_Spam, dictionnaire_Spam, lissage);
 			probHam = calculateProbability(tokensDuCourriel, invertedIndex_Ham, dictionnaire_Ham, lissage);
-			
+			System.out.println("(spam,ham):("+probSpam + ","+probHam+")");
 			//compare les probabilités et prendre celui qui est la plus grande
 			if (probSpam > probHam) {
 				classifier_Spam_Test.put(courriel_ID, tokensDuCourriel);
