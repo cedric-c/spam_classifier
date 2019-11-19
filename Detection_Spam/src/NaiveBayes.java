@@ -95,7 +95,7 @@ public class NaiveBayes {
 		
 		double probHam, probSpam;
 		String courriel_ID;
-		ArrayList<String> tokensDuCourriel;
+		ArrayList<String> tokensDuCourriel = new ArrayList<String>();
 		
 		//itérer à travers de l'ensemble test
 		for (Map.Entry mapElement : test_set.entrySet()) { 

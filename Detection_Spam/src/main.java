@@ -11,7 +11,8 @@ public class main {
 	 * Ceci va nous retourner tous les mots du courriel recherché */
 	protected static HashMap<String, ArrayList<String>> dictionnaire_Ham = new HashMap<String, ArrayList<String>>();
 	protected static HashMap<String, ArrayList<String>> dictionnaire_Spam = new HashMap<String, ArrayList<String>>();
-
+	
+	protected static HashMap<String, ArrayList<String>> test_set; //clé:courriel de l'ensemble test (pas encore classifié); valeur:tokens après le traitement de données
 	
 	/* Inverted Index 
 	 * HashMap<mot, ArratList<courriel_ID>>
@@ -110,9 +111,27 @@ public class main {
 	/*---------------------------------------------------------------------------------------*/
 	
 	public static void main(String[] args) throws Exception {
-		main a = new main();
 		
-		/*TESTER fonction stopWords() */
+		main a = new main();
+		CatalogManager manager = new CatalogManager();
+		dictionnaire_Spam = manager.getMap("spam");
+        dictionnaire_Ham  = manager.getMap("ham");
+        test_set  = manager.getMap("test"); //MODIFIER: ajouter cette ligne
+        
+        a.traitementDeDonnees(dictionnaire_Ham, invertedIndex_Ham);
+        a.traitementDeDonnees(dictionnaire_Spam, invertedIndex_Spam);
+        
+        NaiveBayes nb = new NaiveBayes(dictionnaire_Ham, dictionnaire_Spam, invertedIndex_Ham, invertedIndex_Spam, test_set);
+        nb.classifierNB(false); //pas de lissage
+        
+        HashMap<String, ArrayList<String>> classifier_Ham_Test = nb.getClassifier_Ham_Test();
+        HashMap<String, ArrayList<String>> classifier_Spam_Test = nb.getClassifier_Spam_Test();
+        
+        System.out.print("classifier_Ham_Test: " + classifier_Ham_Test.size());
+        System.out.print("classifier_Spam_Test: " + classifier_Spam_Test.size());
+        
+        
+		/*TESTER fonction stopWords() 
 		ArrayList<String> cars = new ArrayList<String>();
 	    cars.add("Ford");
 	    cars.add("started");
@@ -132,6 +151,7 @@ public class main {
 	    
 	    System.out.println("");
 	    System.out.println("Inverted Index: " + invertedIndex_Ham);
+	    */
 	    	
 	}	
 }
