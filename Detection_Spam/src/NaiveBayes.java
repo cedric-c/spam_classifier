@@ -55,6 +55,7 @@ public class NaiveBayes {
 			if (invertedIndex.containsKey(token)) {
 				nbCourriels = invertedIndex.get(token).size(); //nombre de courriels qui contient ce token d'une classe
 				tmp = nbCourriels/denominateur;
+				//System.out.println("nbCourriels/denominateur = " + tmp);
 			
 			} else { //ensemble d'apprentissage ne contient pas le mot, donc prob conditionnelle est 0
 				tmp = 0;
@@ -103,8 +104,8 @@ public class NaiveBayes {
             tokensDuCourriel = test_set.get(courriel_ID);
 
 			//appeler calculateProbabilty pour calculer les prob conditionelles
-			probSpam = calculateProbability(tokensDuCourriel, invertedIndex_Spam, dictionnaire_Spam, lissage);
-			probHam = calculateProbability(tokensDuCourriel, invertedIndex_Ham, dictionnaire_Ham, lissage);
+			probSpam = calculateProbability(tokensDuCourriel, invertedIndex_Spam, dictionnaire_Spam, lissage)*prior_Spam;
+			probHam = calculateProbability(tokensDuCourriel, invertedIndex_Ham, dictionnaire_Ham, lissage)*prior_Ham;
 			System.out.println("(spam,ham):("+probSpam + ","+probHam+")");
 			//compare les probabilités et prendre celui qui est la plus grande
 			if (probSpam > probHam) {
@@ -112,7 +113,7 @@ public class NaiveBayes {
 			} else if (probSpam < probHam){
 				classifier_Ham_Test.put(courriel_ID, tokensDuCourriel);
 			} else {
-				System.out.println("probSpam == probHam: " + courriel_ID);
+				//System.out.println("probSpam == probHam: " + courriel_ID);
 				classifier_Spam_Test.put(courriel_ID, tokensDuCourriel); //si il n'y a pas de prob max, on va supposé aléatoirement que c'est un spam
 			}
 		}
