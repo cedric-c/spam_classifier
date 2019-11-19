@@ -26,7 +26,7 @@ public class main {
 	 * https://www.geeksforgeeks.org/different-ways-reading-text-file-java/
 	 * */
 	public boolean stopWord(String mot) throws Exception {
-	    File file = new File("test.txt"); //lire le fichier contenant les stopwords
+	    File file = new File("./src/data/stopwords/email.txt"); //lire le fichier contenant les stopwords
 	    Scanner scanner = new Scanner(file); //créer notre scanner
 	    
 	    while (scanner.hasNextLine()) {
@@ -118,6 +118,9 @@ public class main {
         dictionnaire_Ham  = manager.getMap("ham");
         test_set  = manager.getMap("test"); //MODIFIER: ajouter cette ligne
         
+        System.out.println("dictionnaire_Spam: " + dictionnaire_Spam.size());
+        System.out.println("dictionnaire_Ham: " + dictionnaire_Ham.size());
+        
         a.traitementDeDonnees(dictionnaire_Ham, invertedIndex_Ham);
         a.traitementDeDonnees(dictionnaire_Spam, invertedIndex_Spam);
         
@@ -127,8 +130,8 @@ public class main {
         HashMap<String, ArrayList<String>> classifier_Ham_Test = nb.getClassifier_Ham_Test();
         HashMap<String, ArrayList<String>> classifier_Spam_Test = nb.getClassifier_Spam_Test();
         
-        System.out.print("classifier_Ham_Test: " + classifier_Ham_Test.size());
-        System.out.print("classifier_Spam_Test: " + classifier_Spam_Test.size());
+        System.out.println("classifier_Ham_Test: " + classifier_Ham_Test.size());
+        System.out.println("classifier_Spam_Test: " + classifier_Spam_Test.size());
         
         
 		/*TESTER fonction stopWords() 

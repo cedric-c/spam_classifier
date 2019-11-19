@@ -25,8 +25,8 @@ public class NaiveBayes {
 	protected static HashMap<String, ArrayList<String>> invertedIndex_Ham; //inverted index basé sur les courriels ham
 	protected static HashMap<String, ArrayList<String>> invertedIndex_Spam; //inverted index basé sur les courriels ham
 	
-	protected static HashMap<String, ArrayList<String>> classifier_Ham_Test; //courriel de l'ensemble test à été classifié en tant que ham
-	protected static HashMap<String, ArrayList<String>> classifier_Spam_Test; //courriel de l'ensemble test à été classifié en tant que spam
+	protected static HashMap<String, ArrayList<String>> classifier_Ham_Test = new HashMap<String, ArrayList<String>> (); //courriel de l'ensemble test à été classifié en tant que ham
+	protected static HashMap<String, ArrayList<String>> classifier_Spam_Test = new HashMap<String, ArrayList<String>> (); //courriel de l'ensemble test à été classifié en tant que spam
 	
 	protected static HashMap<String, ArrayList<String>> test_set; //clé:courriel de l'ensemble test (pas encore classifié); valeur:tokens après le traitement de données
 	
@@ -100,7 +100,7 @@ public class NaiveBayes {
 		//itérer à travers de l'ensemble test
 		for (Map.Entry mapElement : test_set.entrySet()) { 
             courriel_ID = (String)mapElement.getKey(); 
-            tokensDuCourriel = test_set.get(courriel_ID); 
+            tokensDuCourriel = test_set.get(courriel_ID);
 
 			//appeler calculateProbabilty pour calculer les prob conditionelles
 			probSpam = calculateProbability(tokensDuCourriel, invertedIndex_Spam, dictionnaire_Spam, lissage);
