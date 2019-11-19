@@ -30,6 +30,7 @@ public class NaiveBayes {
 	
 	protected static HashMap<String, ArrayList<String>> test_set; //clé:courriel de l'ensemble test (pas encore classifié); valeur:tokens après le traitement de données
 	
+	protected static double lissage_NB = 0;
 
 	NaiveBayes(HashMap<String, ArrayList<String>> dictionnaire_Ham, HashMap<String, ArrayList<String>> dictionnaire_Spam,
 			HashMap<String, ArrayList<String>> invertedIndex_Ham, HashMap<String, ArrayList<String>> invertedIndex_Spam,
@@ -39,6 +40,18 @@ public class NaiveBayes {
 		this.invertedIndex_Ham = invertedIndex_Ham;
 		this.invertedIndex_Spam = invertedIndex_Spam;
 		this.test_set = test_set;
+		
+	}
+	
+	NaiveBayes(HashMap<String, ArrayList<String>> dictionnaire_Ham, HashMap<String, ArrayList<String>> dictionnaire_Spam,
+			HashMap<String, ArrayList<String>> invertedIndex_Ham, HashMap<String, ArrayList<String>> invertedIndex_Spam,
+			HashMap<String, ArrayList<String>> test_set, double lissage_NB){
+		this.dictionnaire_Ham = dictionnaire_Ham;
+		this.dictionnaire_Spam = dictionnaire_Spam;
+		this.invertedIndex_Ham = invertedIndex_Ham;
+		this.invertedIndex_Spam = invertedIndex_Spam;
+		this.test_set = test_set;
+		this.lissage_NB = lissage_NB;
 		
 	}
 	
@@ -65,12 +78,12 @@ public class NaiveBayes {
 				}
 			}
 			
-			if (i==0 && lissage) {
-				posterior = tmp + 0.1; //ajoute 0,1 à la prob conditionnelle pour le lissage
+			if (i==0 && lissage && lissage_NB>0) {
+				posterior = tmp + lissage_NB; //ajoute 0,1 à la prob conditionnelle pour le lissage
 			} else if (i==0 && !lissage) {
 				posterior = tmp;
-			} else if (lissage && i>0) {
-				posterior = posterior * (tmp + 0.1); //ajoute 0,1 à la prob conditionnelle pour le lissage
+			} else if (lissage && i>0 && lissage_NB>0) {
+				posterior = posterior * (tmp + lissage_NB); //ajoute 0,1 à la prob conditionnelle pour le lissage
 			} else { //lissage && i>0
 				posterior = posterior * tmp;
 			}

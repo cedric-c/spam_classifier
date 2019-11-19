@@ -125,8 +125,8 @@ public class main {
         a.traitementDeDonnees(dictionnaire_Ham, invertedIndex_Ham);
         a.traitementDeDonnees(dictionnaire_Spam, invertedIndex_Spam);
         
-        NaiveBayes nb = new NaiveBayes(dictionnaire_Ham, dictionnaire_Spam, invertedIndex_Ham, invertedIndex_Spam, test_set);
-        nb.classifierNB(true); //pas de lissage
+        NaiveBayes nb = new NaiveBayes(dictionnaire_Ham, dictionnaire_Spam, invertedIndex_Ham, invertedIndex_Spam, test_set,0.7);
+        nb.classifierNB(true); //lissage
         
         HashMap<String, ArrayList<String>> classifier_Ham_Test = nb.getClassifier_Ham_Test();
         HashMap<String, ArrayList<String>> classifier_Spam_Test = nb.getClassifier_Spam_Test();
