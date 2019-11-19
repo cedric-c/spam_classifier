@@ -41,8 +41,9 @@ public class SpamDetector {
         ArrayList<String[]> testing  = data.get(0.9);
         
         for(String[] sample : testing) {        	
-        	HashMap<String[], Double> nearestNeighbors = knn.getNeighbors(sample, training, 4);
-        	knn.predict(sample);
+        	String prediction = knn.neighbors(sample, training, 4)
+        		.predict(sample);
+        	System.out.print(" ... prediction: "+ prediction + "\n\n");
         }
         System.out.println("hello");
         System.exit(0);

@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
@@ -88,6 +89,37 @@ public class KNN {
 		
 	}
 	
+	/**
+	 * 
+	 * @param X1
+	 * @param dataset
+	 * @param K
+	 * @return
+	 */
+	public KNN neighbors(String[] X1, ArrayList<String[]> dataset, int K) {
+		ArrayList<Double> distances = new ArrayList<Double>();
+		HashMap<String[], Double> results = new HashMap<String[], Double>();
+		for(String[] xi : dataset) {
+			double d = this.distance(X1, xi);
+			results.put(xi, d);
+			distances.add(d);
+		}
+		
+		this.sortedK = results.entrySet()
+				.stream()
+				.sorted(Map.Entry.comparingByValue())
+				.limit(K)
+				.collect(Collectors.toMap(Map.Entry::getKey,  Map.Entry::getValue,(e1, e2) -> e2, HashMap::new));
+		
+		return this;
+		
+	}
+	
+	/**
+	 * Predicts the class that input record belongs to.
+	 * @param X1
+	 * @return
+	 */
 	public String predict(String[] X1) {
 		int same = 0, different = 0;
 
@@ -105,14 +137,18 @@ public class KNN {
 			
 		}
 		
+		// Gather collection of label counts
+		Map<Object, Long> labelCounts = this.sortedK.keySet()
+				.stream()
+				.collect(Collectors.groupingBy(e->e[labelIndex], Collectors.counting()));
 		
+		// The actual prediction, simply the label that was used most often
+		String actualPrediction = (String) Collections.max(labelCounts.entrySet(), 
+									Comparator.comparingLong(Map.Entry::getValue)).getKey();
+		
+		System.out.println("actualPrediction: "+actualPrediction);
 		System.out.println("Sample Label is "+ label + " same: " + same + " different: "+ different);
-		
-//		Map<Object, Long> result = this.sortedK
-//			.entrySet()
-//			.stream()
-//			.collect(Collectors.groupingBy(e -> e, Collectors.counting()));
-		
-		return "hi";
+		String predictedLabel = same > different ? label : actualPrediction; 
+		return predictedLabel;
 	}
 }
