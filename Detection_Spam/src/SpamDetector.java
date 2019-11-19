@@ -7,7 +7,12 @@ import java.util.Comparator;
 
 public class SpamDetector {
     
-	public static void main(String[] args) throws IOException{
+	/**
+	 * Run k-NN with Spam and Ham emails
+	 * @throws IOException
+	 */
+	public static void KNNSpam() throws IOException{
+        
         CatalogManager manager = new CatalogManager();
         HashMap<String, ArrayList<String>> spam = manager.getMap("spam");
         HashMap<String, ArrayList<String>> ham  = manager.getMap("ham");
@@ -23,30 +28,6 @@ public class SpamDetector {
 //        	String stemmed = stemmer.stemWord(s);
 //        	System.out.println(s + " " +stemmed + " ");
 //        }
-
-        CSVLoader csv = new CSVLoader("./src/data/iris/iris.csv");
-        csv.load().tabulate(true);
-        String[] row1 = csv.get(0);
-        HashMap<Double, ArrayList<String[]>> data = csv.split(0.1, 0.9);
-        
-        KNN knn = new KNN();
-        
-//        for(String[] xi : csv.data()) {
-//        	double d = knn.distance(row1, xi);
-//        	System.out.println("distance is " + d);
-//        }
-        
-        // Note that nearestNeighbors are not sorted
-        ArrayList<String[]> training = data.get(0.1);
-        ArrayList<String[]> testing  = data.get(0.9);
-        
-        for(String[] sample : testing) {        	
-        	String prediction = knn.neighbors(sample, training, 4)
-        		.predict(sample);
-        	System.out.print(" ... prediction: "+ prediction + "\n\n");
-        }
-        System.out.println("hello");
-        System.exit(0);
         
         HashMap<String, Integer> occurences = manager.getOccurences(spam, false);
 		OutputOccurencesCSV("./src/out/spam_occurences.csv", occurences);
@@ -93,7 +74,7 @@ public class SpamDetector {
 	 		.filter(item -> item.getValue() > 250)
 	 		.filter(item -> item.getValue() < 350)
 	 		.forEach(System.out::println);
-    }
+	}
 	
 	/**	
 	 * Save occurences of words and the number of times they appear to a file.
@@ -102,7 +83,7 @@ public class SpamDetector {
 	 * @throws IOException
 	 * @example OutputOccurencesCSV("./src/out/spam.csv", map)
 	 */
-	public static void OutputOccurencesCSV(String filename, HashMap<String, Integer> map) throws IOException{
+	private static void OutputOccurencesCSV(String filename, HashMap<String, Integer> map) throws IOException{
         System.out.println("Saving data to " + filename);
         SimpleIO.clear(filename);
         SimpleIO.appendStringToFile(filename, "word|occurences\n");
@@ -123,4 +104,33 @@ public class SpamDetector {
     		});
         System.out.println("Data saved.");
 	}
+	
+	/**
+	 * Run k-NN with the Iris flower data.
+	 */
+	public static void KNNIris() {
+        
+		// Load prepared data, split into test set and train set
+        CSVLoader csv = new CSVLoader("./src/data/iris/iris.csv");
+        csv.load().tabulate(true);
+        HashMap<Double, ArrayList<String[]>> data = csv.split(0.1, 0.9);
+        ArrayList<String[]> training = data.get(0.1);
+        ArrayList<String[]> testing  = data.get(0.9);
+        
+        // Run k-NN
+        KNN knn = new KNN();
+        for(String[] sample : testing) {        	
+        	String prediction = knn.neighbors(sample, training, 4)
+        		.predict(sample);
+        	System.out.print(" ... prediction: "+ prediction + "\n\n");
+        }
+        
+        System.out.println("k-NN Done!");
+	}
+	
+	public static void main(String[] args) {
+
+		KNNIris();
+        
+    }
 }
