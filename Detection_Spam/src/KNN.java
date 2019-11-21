@@ -4,6 +4,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.*;
 
 public class KNN {
 	
@@ -11,6 +12,41 @@ public class KNN {
 	
 	public KNN() {
 		
+	}
+	
+	/*
+	 * email1: liste de tokens du courriel 1
+	 * email2: liste de tokens du courriel 2
+	 * INCOMPLET
+	 * */
+	public void getTable(String courriel1D, String courriel2D, ArrayList<String> email1, ArrayList<String> email2, HashMap<String, ArrayList<String>> invertedIndex) {
+
+		Set<String> uniquewords = new HashSet<String>();
+		
+		for (int i=0; i<email1.size(); i++) {
+			uniquewords.add(email1.get(i)); //ajoute le token dans l'ensemble (set) du courriel 2
+		}
+		
+		for (int i=0; i<email2.size(); i++) {
+			uniquewords.add(email2.get(i)); //ajoute le token dans l'ensemble (set) du courriel 2
+		}
+		
+		String[] email1_10 = new String[uniquewords.size()];
+		String[] email2_10 = new String[uniquewords.size()];; //1 0 1 0 1
+		
+		int i=0;
+		for(Object object : uniquewords) {
+		    String token = (String) object;
+		    if(invertedIndex.get(token).contains(courriel1D)) {
+		    	email1_10 [i] = "1";
+		    }
+		    
+		    if(invertedIndex.get(token).contains(courriel2D)) {
+		    	email1_10 [i] = "1";
+		    }
+		    
+		    i++;
+		}
 	}
 	
 	/**
