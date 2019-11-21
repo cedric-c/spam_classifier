@@ -125,37 +125,14 @@ public class main {
         a.traitementDeDonnees(dictionnaire_Ham, invertedIndex_Ham);
         a.traitementDeDonnees(dictionnaire_Spam, invertedIndex_Spam);
         
-        NaiveBayes nb = new NaiveBayes(dictionnaire_Ham, dictionnaire_Spam, invertedIndex_Ham, invertedIndex_Spam, test_set);
-        nb.classifierNB(true); //pas de lissage
+        NaiveBayes nb = new NaiveBayes(dictionnaire_Ham, dictionnaire_Spam, invertedIndex_Ham, invertedIndex_Spam, test_set,0.7);
+        nb.classifierNB(true); //lissage
         
         HashMap<String, ArrayList<String>> classifier_Ham_Test = nb.getClassifier_Ham_Test();
         HashMap<String, ArrayList<String>> classifier_Spam_Test = nb.getClassifier_Spam_Test();
         
         System.out.println("classifier_Ham_Test: " + classifier_Ham_Test.size());
         System.out.println("classifier_Spam_Test: " + classifier_Spam_Test.size());
-        
-        
-		/*TESTER fonction stopWords() 
-		ArrayList<String> cars = new ArrayList<String>();
-	    cars.add("Ford");
-	    cars.add("started");
-	    cars.add("day");
-	    dictionnaire_Ham.put("automobile", cars);
-	    
-	    cars = new ArrayList<String>(); //créer nouvelle liste
-		cars.add("September");
-	    cars.add("yoo");
-	    cars.add("started");
-	    cars.add("course");
-	    dictionnaire_Ham.put("random", cars);
-	    
-	    System.out.println("Dictionnaire avant: " + dictionnaire_Ham); //avant
-	    a.traitementDeDonnees(dictionnaire_Ham, invertedIndex_Ham); 
-	    System.out.println("Dictionnaire stemmed: " + dictionnaire_Ham); //après
-	    
-	    System.out.println("");
-	    System.out.println("Inverted Index: " + invertedIndex_Ham);
-	    */
 	    	
 	}	
 }

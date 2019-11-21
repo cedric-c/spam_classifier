@@ -30,6 +30,7 @@ public class NaiveBayes {
 	
 	protected static HashMap<String, ArrayList<String>> test_set; //clé:courriel de l'ensemble test (pas encore classifié); valeur:tokens après le traitement de données
 	
+	protected static double lissage_NB = 0;
 
 	NaiveBayes(HashMap<String, ArrayList<String>> dictionnaire_Ham, HashMap<String, ArrayList<String>> dictionnaire_Spam,
 			HashMap<String, ArrayList<String>> invertedIndex_Ham, HashMap<String, ArrayList<String>> invertedIndex_Spam,
@@ -42,8 +43,20 @@ public class NaiveBayes {
 		
 	}
 	
+	NaiveBayes(HashMap<String, ArrayList<String>> dictionnaire_Ham, HashMap<String, ArrayList<String>> dictionnaire_Spam,
+			HashMap<String, ArrayList<String>> invertedIndex_Ham, HashMap<String, ArrayList<String>> invertedIndex_Spam,
+			HashMap<String, ArrayList<String>> test_set, double lissage_NB){
+		this.dictionnaire_Ham = dictionnaire_Ham;
+		this.dictionnaire_Spam = dictionnaire_Spam;
+		this.invertedIndex_Ham = invertedIndex_Ham;
+		this.invertedIndex_Spam = invertedIndex_Spam;
+		this.test_set = test_set;
+		this.lissage_NB = lissage_NB;
+		
+	}
+	
 	private double calculateProbability(ArrayList<String> test_tokens, HashMap<String, ArrayList<String>> invertedIndex, HashMap<String, ArrayList<String>> dictionnaire, boolean lissage) {
-		double posterior = 0; //probabilité conditionnelle: P([token1 ET token2 ... ET tokenN]| classe)
+		double posterior=0; //probabilité conditionnelle: P([token1 ET token2 ... ET tokenN]| classe)
 		int denominateur = dictionnaire.size(); //tous les courriels de cette classe
 		String token; //un momt dans l'arrayList test_Tokens
 		int nbCourriels;
@@ -55,18 +68,23 @@ public class NaiveBayes {
 			if (invertedIndex.containsKey(token)) {
 				nbCourriels = invertedIndex.get(token).size(); //nombre de courriels qui contient ce token d'une classe
 				tmp = nbCourriels/denominateur;
+				//System.out.print(tmp + " ");
 				//System.out.println("nbCourriels/denominateur = " + tmp);
 			
 			} else { //ensemble d'apprentissage ne contient pas le mot, donc prob conditionnelle est 0
 				tmp = 0;
-				if (!lissage) {
+				if (!lissage) { //si il n'y a pas de lissage, on sait que la prob va être 0
 					return 0; //car si un mot n'existe pas, alors une des probabiltiés conditionnelles vont être à 0, donc le résultat va être à 0
 				}
 			}
 			
-			if (lissage) {
-				posterior = posterior * (tmp + 0.1); //ajoute 0,1 à la prob conditionnelle pour le lissage
-			} else {
+			if (i==0 && lissage && lissage_NB>0) {
+				posterior = tmp + lissage_NB; //ajoute 0,1 à la prob conditionnelle pour le lissage
+			} else if (i==0 && !lissage) {
+				posterior = tmp;
+			} else if (lissage && i>0 && lissage_NB>0) {
+				posterior = posterior * (tmp + lissage_NB); //ajoute 0,1 à la prob conditionnelle pour le lissage
+			} else { //lissage && i>0
 				posterior = posterior * tmp;
 			}
 		} //fin de la boucle for
@@ -76,14 +94,21 @@ public class NaiveBayes {
 	
 	
 	/* retourne le priori de la classe choisie */
-	private double getPriors(String classe) {
-		int count_Ham = dictionnaire_Ham.size();
-		int count_Spam = dictionnaire_Spam.size();
-		int total_courriel = count_Ham + count_Spam;
+	public double getPriors(String classe) {
+		double count_Ham = dictionnaire_Ham.size();
+		double count_Spam = dictionnaire_Spam.size();
+		double total_courriel = count_Ham + count_Spam;
+		double prior = 0;
 		
-		if (classe.equals("spam")) { return count_Spam/total_courriel; }
-		else if (classe.equals("ham")) { return count_Ham/total_courriel; }
-		else { return 0; }	
+		if (classe.equals("spam")) { 
+			prior = count_Spam/total_courriel;
+			return prior; }
+		else if (classe.equals("ham")) { 
+			prior = count_Ham/total_courriel;
+			return prior; }
+		else { 
+			System.out.println("ELSE prior = 0 ");
+			return 0; }	
 	} //fin de la fonction getPriors
 	
 	
@@ -105,8 +130,11 @@ public class NaiveBayes {
 
 			//appeler calculateProbabilty pour calculer les prob conditionelles
 			probSpam = calculateProbability(tokensDuCourriel, invertedIndex_Spam, dictionnaire_Spam, lissage)*prior_Spam;
+			
 			probHam = calculateProbability(tokensDuCourriel, invertedIndex_Ham, dictionnaire_Ham, lissage)*prior_Ham;
 			System.out.println("(spam,ham):("+probSpam + ","+probHam+")");
+		
+			
 			//compare les probabilités et prendre celui qui est la plus grande
 			if (probSpam > probHam) {
 				classifier_Spam_Test.put(courriel_ID, tokensDuCourriel);
