@@ -72,6 +72,14 @@ public class SimpleIO{
     	writer.close();
     }
     
+    public static void writeStringsToFile(String path, ArrayList<String[]> content) throws IOException {
+    	FileWriter writer = new FileWriter(path);
+    	for(String[] s : content) {
+    		writer.write(String.join(",", s) + "\n");
+    	}
+    	writer.close();
+    }
+    
     public static void appendStringToFile(String path, String content) throws IOException{
     	File f = new File(path);
     	

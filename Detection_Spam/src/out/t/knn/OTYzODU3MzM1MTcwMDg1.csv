@@ -1,0 +1,16 @@
+testno,time,prediction,actual,K,trainingSize,testingSize,correct
+0,1574295375879,Iris-setosa,Iris-setosa,8,0.9,0.1,1
+1,1574295375879,Iris-versicolor,Iris-versicolor,8,0.9,0.1,1
+2,1574295375879,Iris-virginica,Iris-virginica,8,0.9,0.1,1
+3,1574295375879,Iris-versicolor,Iris-versicolor,8,0.9,0.1,1
+4,1574295375879,Iris-virginica,Iris-virginica,8,0.9,0.1,1
+5,1574295375879,Iris-versicolor,Iris-versicolor,8,0.9,0.1,1
+6,1574295375879,Iris-setosa,Iris-setosa,8,0.9,0.1,1
+7,1574295375880,Iris-virginica,Iris-versicolor,8,0.9,0.1,0
+8,1574295375880,Iris-setosa,Iris-setosa,8,0.9,0.1,1
+9,1574295375880,Iris-setosa,Iris-setosa,8,0.9,0.1,1
+10,1574295375880,Iris-virginica,Iris-virginica,8,0.9,0.1,1
+11,1574295375880,Iris-versicolor,Iris-versicolor,8,0.9,0.1,1
+12,1574295375880,Iris-setosa,Iris-setosa,8,0.9,0.1,1
+13,1574295375880,Iris-virginica,Iris-virginica,8,0.9,0.1,1
+14,1574295375880,Iris-setosa,Iris-setosa,8,0.9,0.1,1

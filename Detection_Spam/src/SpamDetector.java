@@ -108,29 +108,81 @@ public class SpamDetector {
 	/**
 	 * Run k-NN with the Iris flower data.
 	 */
-	public static void KNNIris() {
+	public static ArrayList<String[]> KNNIris(String linkToFeaturedData, double trainingSize, double testingSize, int K) {
         
+		System.out.printf("Starting k-NN trainingSize %f, testingSize %f, K=%d\n",
+				trainingSize,
+				testingSize,
+				K);
+		
 		// Load prepared data, split into test set and train set
-        CSVLoader csv = new CSVLoader("./src/data/iris/iris.csv");
+        CSVLoader csv = new CSVLoader(linkToFeaturedData);
         csv.load().tabulate(true);
-        HashMap<Double, ArrayList<String[]>> data = csv.split(0.1, 0.9);
-        ArrayList<String[]> training = data.get(0.1);
-        ArrayList<String[]> testing  = data.get(0.9);
+        HashMap<Double, ArrayList<String[]>> data = csv.split(trainingSize, testingSize);
+        ArrayList<String[]> training = data.get(trainingSize);
+        ArrayList<String[]> testing  = data.get(testingSize);
+        
+        ArrayList<String[]> statistics = new ArrayList<String[]>();
+        statistics.add(new String[] {"testno",
+        		"time",
+        		"prediction",
+        		"actual",
+        		"K",
+        		"trainingSize",
+        		"testingSize",
+        		"correct"
+        		});
         
         // Run k-NN
         KNN knn = new KNN();
+        int testno = 0;
         for(String[] sample : testing) {        	
-        	String prediction = knn.neighbors(sample, training, 4)
+        	String prediction = knn.neighbors(sample, training, K)
         		.predict(sample);
         	System.out.print(" ... prediction: "+ prediction + "\n\n");
+        	statistics.add(new String[] {
+            		String.valueOf(testno),
+            		String.valueOf(System.currentTimeMillis()),
+            		prediction,
+            		sample[sample.length - 1 ],
+            		String.valueOf(K),
+            		String.valueOf(trainingSize),
+            		String.valueOf(testingSize),
+            		prediction.equals(sample[sample.length -1]) ? "1" : "0"
+            });
+        	testno++;
         }
-        
         System.out.println("k-NN Done!");
+        return statistics;
 	}
 	
 	public static void main(String[] args) {
 
-		KNNIris();
-        
-    }
+		String link = "./src/data/iris/iris.csv";
+		
+		Double[] setSize = new Double[] {.1, .2, .3, .4, .5, .6, .7, .8, .9};
+		Integer[] KSize = new Integer[] {3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
+		
+		for(int i = 0; i < setSize.length; i++) {
+			for(int j = 0; j < 5; j++) {
+				for(int o : KSize) {
+					ArrayList<String[]> result = KNNIris(link, setSize[i], setSize[setSize.length - i -1], o);
+					String b64 = SimpleIO.toBase64(String.valueOf(System.nanoTime()));
+					String filename = b64 + ".csv";
+					writeTest("./src/out/t/knn/" + filename, result);
+					
+				}
+			}
+		}
+
+
+	}
+	
+	public static void writeTest(String name, ArrayList<String[]> result) {
+		try {
+			SimpleIO.writeStringsToFile(name, result);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }

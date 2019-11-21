@@ -146,8 +146,6 @@ public class KNN {
 		String actualPrediction = (String) Collections.max(labelCounts.entrySet(), 
 									Comparator.comparingLong(Map.Entry::getValue)).getKey();
 		
-		System.out.println("actualPrediction: "+actualPrediction);
-		System.out.println("Sample Label is "+ label + " same: " + same + " different: "+ different);
 		String predictedLabel = same > different ? label : actualPrediction; 
 		return predictedLabel;
 	}
