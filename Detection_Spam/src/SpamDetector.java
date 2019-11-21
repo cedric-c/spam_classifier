@@ -139,7 +139,6 @@ public class SpamDetector {
         for(String[] sample : testing) {        	
         	String prediction = knn.neighbors(sample, training, K)
         		.predict(sample);
-        	System.out.print(" ... prediction: "+ prediction + "\n\n");
         	statistics.add(new String[] {
             		String.valueOf(testno),
             		String.valueOf(System.currentTimeMillis()),
@@ -164,13 +163,30 @@ public class SpamDetector {
 		Integer[] KSize = new Integer[] {3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
 		
 		for(int i = 0; i < setSize.length; i++) {
-			for(int j = 0; j < 5; j++) {
+			for(int j = 0; j < 10; j++) {
 				for(int o : KSize) {
-					ArrayList<String[]> result = KNNIris(link, setSize[i], setSize[setSize.length - i -1], o);
+					Double train = setSize[i];
+					Double test = setSize[setSize.length - i -1];
+					ArrayList<String[]> result = KNNIris(link, train, test, o);
 					String b64 = SimpleIO.toBase64(String.valueOf(System.nanoTime()));
 					String filename = b64 + ".csv";
 					writeTest("./src/out/t/knn/" + filename, result);
-					
+					int sum = result.stream()
+						.filter(s -> !s[0].equals("testno")) // remove the first row
+						.mapToInt(s -> Integer.parseInt(s[s.length-1])).sum();
+					StringBuilder sb = new StringBuilder();
+					sb.append(o + ",");
+					sb.append(train + ",");
+					sb.append(test + ",");
+					double v = ((double) sum / (double) result.size());
+					sb.append(String.format("%.4f", v));
+					sb.append("\n");
+					System.out.println(sum + " " + result.size());
+					try {
+						SimpleIO.appendStringToFile("./src/out/iris_aggregate.csv", sb.toString());						
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 				}
 			}
 		}
