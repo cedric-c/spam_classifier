@@ -163,7 +163,7 @@ public class SpamDetector {
 		Integer[] KSize = new Integer[] {3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
 		
 		for(int i = 0; i < setSize.length; i++) {
-			for(int j = 0; j < 10; j++) {
+			for(int j = 0; j < 20; j++) {
 				for(int o : KSize) {
 					Double train = setSize[i];
 					Double test = setSize[setSize.length - i -1];
