@@ -155,22 +155,40 @@ public class SpamDetector {
         return statistics;
 	}
 	
+	public static void Catherine() {
+		try {
+			main a = new main();
+			HashMap<String, HashMap<String, ArrayList<String>>> maps = a.Cedric();
+			HashMap<String, ArrayList<String>> iSpam = maps.get("iSpam");
+			HashMap<String, ArrayList<String>> iHam = maps.get("iHam");
+			System.out.println("Hello World!");
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public static void main(String[] args) {
 
+		Catherine();
+		
+		System.exit(0);
+		
 		String link = "./src/data/iris/iris.csv";
 		
 		Double[] setSize = new Double[] {.1, .2, .3, .4, .5, .6, .7, .8, .9};
 		Integer[] KSize = new Integer[] {3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
 		
+
+		
 		for(int i = 0; i < setSize.length; i++) {
-			for(int j = 0; j < 20; j++) {
+			for(int j = 0; j < 40; j++) {
 				for(int o : KSize) {
 					Double train = setSize[i];
 					Double test = setSize[setSize.length - i -1];
 					ArrayList<String[]> result = KNNIris(link, train, test, o);
 					String b64 = SimpleIO.toBase64(String.valueOf(System.nanoTime()));
 					String filename = b64 + ".csv";
-					writeTest("./src/out/t/knn/" + filename, result);
+//					writeTest("./src/out/t/knn/" + filename, result);
 					int sum = result.stream()
 						.filter(s -> !s[0].equals("testno")) // remove the first row
 						.mapToInt(s -> Integer.parseInt(s[s.length-1])).sum();
@@ -179,11 +197,11 @@ public class SpamDetector {
 					sb.append(train + ",");
 					sb.append(test + ",");
 					double v = ((double) sum / (double) result.size());
-					sb.append(String.format("%.4f", v));
+					sb.append(String.format("%.2f", v));
 					sb.append("\n");
 					System.out.println(sum + " " + result.size());
 					try {
-						SimpleIO.appendStringToFile("./src/out/iris_aggregate.csv", sb.toString());						
+						SimpleIO.appendStringToFile("./src/out/iris_aggregate2.csv", sb.toString());						
 					} catch (Exception e) {
 						e.printStackTrace();
 					}

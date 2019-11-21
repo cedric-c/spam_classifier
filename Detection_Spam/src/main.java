@@ -106,8 +106,24 @@ public class main {
 	
 	
 	/*---------------------------------------------------------------------------------------*/
-	public void TEST(String mot) throws Exception {
-
+	public HashMap<String, HashMap<String, ArrayList<String>>> Cedric() throws Exception {
+		CatalogManager manager = new CatalogManager();
+		dictionnaire_Spam = manager.getMap("spam", 400);
+        dictionnaire_Ham  = manager.getMap("ham", 600);
+        test_set  = manager.getMap("test"); //MODIFIER: ajouter cette ligne
+        
+        
+        // Merci Catherine
+        HashMap<String, HashMap<String, ArrayList<String>>> 
+        	c = new HashMap<String, HashMap<String, ArrayList<String>>>();
+        
+        traitementDeDonnees(dictionnaire_Ham, invertedIndex_Ham);
+        traitementDeDonnees(dictionnaire_Spam, invertedIndex_Spam);
+        
+        c.put("iSpam", invertedIndex_Spam);
+        c.put("iHam", invertedIndex_Ham);
+        
+        return c;
 	}
 	/*---------------------------------------------------------------------------------------*/
 	

@@ -19,9 +19,9 @@ public class KNN {
 	 * @param X2 sample2
 	 * @return
 	 */
-	public double distance(String[] X1, String[] X2) {
+	public double distance(String[] X1, String[] X2){
 		int dims = X1.length;
-		String[] returnVector = new String[3]; // X1 X2 same class
+		// String[] returnVector = new String[3]; // X1 X2 same class
 		double distance = 0.0;
 		
 		for(int i = 0; i < dims; i++) {
