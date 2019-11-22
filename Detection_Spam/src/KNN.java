@@ -6,49 +6,126 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.*;
 
+
 public class KNN {
 	
-	HashMap<String[], Double> sortedK;
 	
-	public KNN() {
-		
+	HashMap<String[], Double> sortedK;
+	protected static HashMap<String, ArrayList<String>> invertedIndex_Ham; //inverted index basé sur les courriels ham
+	protected static HashMap<String, ArrayList<String>> invertedIndex_Spam; //inverted index basé sur les courriels ham
+	
+	protected static HashMap<Set, Double> distance = new HashMap<Set, Double>(); 
+	
+	protected static ArrayList<String[]> statistics = new ArrayList<String[]>();
+    
+	
+	public KNN() { }
+	
+	public KNN(HashMap<String, ArrayList<String>> invertedIndex_Ham, HashMap<String, ArrayList<String>> invertedIndex_Spam) {
+		this.invertedIndex_Ham = invertedIndex_Ham;
+		this.invertedIndex_Spam = invertedIndex_Spam;
+	    this.statistics.add(new String[] {"test_courriel_ID",
+	    		"training_courriel_ID",
+	    		"distance",
+	    		"type"});
 	}
 	
+	
+	
+	public HashMap<Set, Double> getDistance(){
+		return distance;
+	} 
+	
 	/*
-	 * email1: liste de tokens du courriel 1
-	 * email2: liste de tokens du courriel 2
-	 * INCOMPLET
+	 * courriel1_ID: test
+	 * courriel2_ID: training
 	 * */
-	public void getTable(String courriel1D, String courriel2D, ArrayList<String> email1, ArrayList<String> email2, HashMap<String, ArrayList<String>> invertedIndex) {
+	public void getTable(String type, String courriel1_ID, String courriel2_ID, ArrayList<String> email1, ArrayList<String> email2) {
 
 		Set<String> uniquewords = new HashSet<String>();
+		Set<String> tokens_courriel1 = new HashSet<String>();
+		Set<String> tokens_courriel2 = new HashSet<String>();
+		
+		int nb_tokens_courriel1, nb_tokens_courriel2, nb_intersection;
+		
 		
 		for (int i=0; i<email1.size(); i++) {
-			uniquewords.add(email1.get(i)); //ajoute le token dans l'ensemble (set) du courriel 2
+			uniquewords.add(email1.get(i)); //ajoute le token dans l'ensemble (set) du courriel 1
+			tokens_courriel1.add(email1.get(i));
 		}
 		
 		for (int i=0; i<email2.size(); i++) {
 			uniquewords.add(email2.get(i)); //ajoute le token dans l'ensemble (set) du courriel 2
+			tokens_courriel2.add(email2.get(i));
 		}
 		
-		String[] email1_10 = new String[uniquewords.size()];
-		String[] email2_10 = new String[uniquewords.size()];; //1 0 1 0 1
+		nb_tokens_courriel1 = tokens_courriel1.size(); //nombre total de tokens dans courriel 1
+		nb_tokens_courriel2 = tokens_courriel2.size(); //nombre total de tokens dans courriel 2
 		
-		int i=0;
-		for(Object object : uniquewords) {
-		    String token = (String) object;
-		    if(invertedIndex.get(token).contains(courriel1D)) {
-		    	email1_10 [i] = "1";
-		    }
-		    
-		    if(invertedIndex.get(token).contains(courriel2D)) {
-		    	email1_10 [i] = "1";
-		    }
-		    
-		    i++;
+		tokens_courriel1.retainAll(tokens_courriel2); //tokens_courriel1: contient l'INTERSECTION des 2 ensembles
+		nb_intersection = tokens_courriel1.size();
+		
+		int[] email1_10 = new int[uniquewords.size()+1];
+		int[] email2_10 = new int[uniquewords.size()+1];
+		
+		/*
+		 * On sait qu'il y aura des "1" dans les tableaux pour les mots pareils
+		 * */
+		int index = 0;
+		for (int i=0; i< nb_intersection; i++) {
+			email1_10[i] = 1;
+			email2_10[i] = 1;
+			index = i;
 		}
+		
+		//courriel 1
+		for (int i=0; i<(nb_tokens_courriel1 - nb_intersection); i++) {
+			email1_10[i+index+1] = 1;
+			email2_10[i+index+1] = 0;
+		}
+		
+		//courriel 2
+		index = index + nb_tokens_courriel1 - nb_intersection;
+		for (int i=0; i<(nb_tokens_courriel2 - nb_intersection); i++) {
+			email1_10[i+index + 1] = 0;
+			email2_10[i+index + 1] = 1;
+		}
+		
+		Set<String> test_train_emailID = new HashSet<String>();
+		test_train_emailID.add(courriel1_ID);
+		test_train_emailID.add(courriel2_ID);
+		distance.put(test_train_emailID, distance(email1_10, email2_10));
+	
+		
+		statistics.add(new String[] { courriel1_ID, courriel2_ID, String.valueOf(distance(email1_10, email2_10)), type });
+	
 	}
 	
+	public void exportCSV() {
+		try {
+			SimpleIO.writeStringsToFile("./src/out/my.csv", statistics);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+	
+	public double distance(int[] X1, int[] X2){
+		int dims = X1.length;
+		// String[] returnVector = new String[3]; // X1 X2 same class
+		double distance = 0.0;
+		
+		for(int i = 0; i < dims; i++) {
+			double a = X1[i];
+			double b = X2[i];
+			
+			distance += (a - b) * (a - b);
+		}
+		
+		return Math.sqrt(distance);
+	}
+	
+
 	/**
 	 * Calculates the Euclidean distances between two CSV rows, X1, X2.
 	 * @param X1 sample1
@@ -185,4 +262,5 @@ public class KNN {
 		String predictedLabel = same > different ? label : actualPrediction; 
 		return predictedLabel;
 	}
+
 }
