@@ -77,7 +77,8 @@ public class main {
 	 * Inspirer de ce site web pour itérer à travers d'un hashmap
 	 * https://www.geeksforgeeks.org/traverse-through-a-hashmap-in-java/
 	 * */
-	public void traitementDeDonnees(HashMap<String, ArrayList<String>> dictionnaire, HashMap<String, ArrayList<String>> invertedIndex) throws Exception {
+	public void traitementDeDonnees(HashMap<String, ArrayList<String>> dictionnaire,
+			HashMap<String, ArrayList<String>> invertedIndex) throws Exception {
 		
 		String courriel_ID; //get la clé (ID du courriel)
 		ArrayList<String> tokensDuCourriel; //tokens du courriel
@@ -103,6 +104,51 @@ public class main {
         } 
 		
 	}
+	
+	
+	/*
+	 * Inspirer de ce site web pour itérer à travers d'un hashmap
+	 * https://www.geeksforgeeks.org/traverse-through-a-hashmap-in-java/
+	 * */
+	public HashMap<String, ArrayList<String>> ConstructInvertedIndex(HashMap<String, ArrayList<String>> dictionnaire) throws Exception {
+		
+		String courriel_ID; //get la clé (ID du courriel)
+		ArrayList<String> tokensDuCourriel; //tokens du courriel
+		String token, stemToken;
+		
+		HashMap<String, ArrayList<String>> invertedIndex = new HashMap<String, ArrayList<String>>();
+		
+		//itérer à travers de chaque courriel
+		for (Map.Entry mapElement : dictionnaire.entrySet()) { 
+            courriel_ID = (String)mapElement.getKey(); 
+            tokensDuCourriel = dictionnaire.get(courriel_ID); 
+            
+            //itérer à travers de chaque tokens dans le courriel
+			for (int j=0; j< tokensDuCourriel.size(); j++) {
+				
+				token = tokensDuCourriel.get(j);
+				if(!stopWord(token)) {
+					stemToken = stemming(token);
+					tokensDuCourriel.set(j, stemToken); //stem le mot
+
+					ArrayList<String> listeDeCourrielID = new ArrayList<String>();
+					if (invertedIndex.containsKey(stemToken)) {
+						listeDeCourrielID = invertedIndex.get(stemToken);
+						listeDeCourrielID.add(courriel_ID);
+						invertedIndex.put(courriel_ID, listeDeCourrielID);
+					} else { //ajoute un nouveau mot comme clé
+						listeDeCourrielID.add(courriel_ID);
+						invertedIndex.put(stemToken, listeDeCourrielID);
+					}
+				} else {
+					tokensDuCourriel.remove(j); //enlève ce token car c'est un stopWord
+				}
+			}
+        }
+		return invertedIndex;
+		
+	}
+	
 	
 	
 	/*---------------------------------------------------------------------------------------*/

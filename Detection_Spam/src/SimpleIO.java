@@ -80,6 +80,24 @@ public class SimpleIO{
     	writer.close();
     }
     
+    public static void writeStringsToFile(String path, String[] content) throws IOException {
+    	FileWriter writer = new FileWriter(path);
+    	writer.write(String.join(",", content) + "\n");
+    	writer.close();
+    }
+    
+    public static void appendStringToFile(String path, String[] content) throws IOException {
+    	File f = new File(path);
+    	
+    	if(!f.exists()) 
+    		f.createNewFile();
+    	
+    	FileWriter fw = new FileWriter(path, true);
+    	BufferedWriter bw = new BufferedWriter(fw);
+    	bw.write(String.join(",",content) + "\n");
+    	bw.close();
+    }
+    
     public static void appendStringToFile(String path, String content) throws IOException{
     	File f = new File(path);
     	

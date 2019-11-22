@@ -90,13 +90,14 @@ public class KNN {
 	}
 	
 	/**
-	 * 
-	 * @param X1
-	 * @param dataset
-	 * @param K
+	 * Finds the K closest neighbors to X1.
+	 * @param X1 The candidate that is being compared.
+	 * @param dataset The pool of possible neighbors to choose from.
+	 * @param K The number of neighbours to choose.
 	 * @return
 	 */
 	public KNN neighbors(String[] X1, ArrayList<String[]> dataset, int K) {
+//		System.out.println("Finding best neighbors amongst neighbors of size " + dataset.size());
 		ArrayList<Double> distances = new ArrayList<Double>();
 		HashMap<String[], Double> results = new HashMap<String[], Double>();
 		for(String[] xi : dataset) {
@@ -121,6 +122,7 @@ public class KNN {
 	 * @return
 	 */
 	public String predict(String[] X1) {
+//		System.out.println("Predicting classification");
 		int same = 0, different = 0;
 
 		int labelIndex = X1.length -1;

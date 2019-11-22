@@ -13,6 +13,7 @@ import java.util.StringTokenizer;
 public class CatalogManager {
     private static String PATH_HAM = "./src/data/ham-and-spam-dataset/ham/";
     private static String PATH_SPAM = "./src/data/ham-and-spam-dataset/spam/";
+    private static String PATH_MERGED = "./src/data/ham-and-spam-dataset/merged/";
     private static String PATH_NON_CLASSIFIED = "./src/test_data_CAT/ham-and-spam-dataset/test_set"; //MODIFIER: l'ensemble test qui n'a pas été classifié
     private static String PATH_ENG_STOPWORDS = "./src/data/stopwords/";
 
@@ -22,6 +23,7 @@ public class CatalogManager {
         this.fileDirectories = new HashMap<String, String>();
         this.addDirectory("ham", PATH_HAM);
         this.addDirectory("spam", PATH_SPAM);
+        this.addDirectory("all", PATH_MERGED);
         this.addDirectory("stopwords", PATH_ENG_STOPWORDS);
         this.addDirectory("test", PATH_NON_CLASSIFIED); //MODIFIER: ajouter le chemin pour les données test
     }
