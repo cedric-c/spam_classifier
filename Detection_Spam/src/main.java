@@ -127,9 +127,76 @@ public class main {
 	}
 	/*---------------------------------------------------------------------------------------*/
 	
+<<<<<<< HEAD
 	public static void main(String[] args) throws Exception {
 	
 		 //------------------------- NAIVE BAYES (3 cas: balancé, undersampling, oversampling) ------------------------
+=======
+	public static void runKNN(String mapKeyHam, String mapKeySpam, String saveFileName) throws Exception {
+		main a = new main();
+		
+		// (ham_400, spam_400_a), (ham_100, spam_460), (ham_2500, spam_400_b)
+		CatalogManager manager = new CatalogManager();
+		
+		long time = System.nanoTime();
+		
+		dictionnaire_Spam = manager.getMap(mapKeySpam);
+        dictionnaire_Ham  = manager.getMap(mapKeyHam);
+        test_set  = manager.getMap("test_80"); //MODIFIER: ajouter cette ligne
+
+        // CHANGE THE FILENAME FOR SAVING DATA
+//        String filename = "400.csv";
+        
+        a.traitementDeDonnees(dictionnaire_Ham, invertedIndex_Ham);
+        a.traitementDeDonnees(dictionnaire_Spam, invertedIndex_Spam);
+        
+        
+        
+        System.out.println("kNN");
+        KNN knn = new KNN(invertedIndex_Ham, invertedIndex_Spam);
+		
+		String courriel_ID_test, courriel_ID_Spam, courriel_ID_Ham; //get la clé (ID du courriel)
+		ArrayList<String> tokensDuCourriel; //tokens du courriel
+		String token, stemToken;
+
+      //itérer à travers de chaque courriel du test set
+  		for (Map.Entry mapElement : test_set.entrySet()) { 
+              courriel_ID_test = (String)mapElement.getKey(); 
+              tokensDuCourriel = test_set.get(courriel_ID_test); //arrayList avec tous les mots du courriel test
+              
+              for (Map.Entry mapElement2 : dictionnaire_Ham.entrySet()) {
+            	  courriel_ID_Ham = (String)mapElement2.getKey(); 
+            	  knn.getTable("ham",courriel_ID_test, courriel_ID_Ham, tokensDuCourriel, dictionnaire_Ham.get(courriel_ID_Ham));
+  				
+              }
+              
+              for (Map.Entry mapElement3 : dictionnaire_Spam.entrySet()) {
+            	  courriel_ID_Spam = (String)mapElement3.getKey(); 
+  				knn.getTable("spam", courriel_ID_test, courriel_ID_Spam, tokensDuCourriel, dictionnaire_Spam.get(courriel_ID_Spam));
+  				
+              }
+  		}
+  		
+  		knn.exportCSV(saveFileName + "_" + time + ".csv");
+  		System.out.println("FINI");
+	}
+	
+	public static void main(String[] args) throws Exception {
+		
+		
+		String[] hams = new String[] {"ham_400", "ham_100", "ham_2500"};
+		String[] spams = new String[] {"spam_400_a", "spam_460", "spam_400_b"};
+		String[] filenames = new String[] {"balanced", "undersampled", "oversampled"};
+		
+		for(int i = 0; i < filenames.length; i++) {
+			runKNN(hams[i], spams[i], filenames[i]);
+		}
+  		
+  		//HashMap<Set, Double> distance = knn.getDistance();
+  		//System.out.println(distance.size());
+  		
+		
+>>>>>>> 243d7e273c5c6ad079d20fda3262a5729a38578e
 		/*
 		 * Cas 1: DossierA_Classe_Balancee
 		 * 		=> 400 hams, 400 spams, 80  courriels test

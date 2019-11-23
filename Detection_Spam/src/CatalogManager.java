@@ -13,6 +13,11 @@ import java.util.StringTokenizer;
 public class CatalogManager {
     private static String PATH_HAM = "./src/data/ham-and-spam-dataset/ham/";
     private static String PATH_SPAM = "./src/data/ham-and-spam-dataset/spam/";
+    
+    private static String PATH_BALANCED = "./src/data/DossierA_Classe_Balancee/";
+    private static String PATH_UNDERSHAMPLED = "./src/data/DossierB_Undersampling_Ham/";
+    private static String PATH_OVERSHAMPLED = "./src/data/DossierC_Oversampling_Ham/";
+    
     private static String PATH_NON_CLASSIFIED = "./src/test_data_CAT/ham-and-spam-dataset/test_set"; //MODIFIER: l'ensemble test qui n'a pas été classifié
     private static String PATH_ENG_STOPWORDS = "./src/data/stopwords/";
 
@@ -67,7 +72,27 @@ public class CatalogManager {
         this.addDirectory("ham", PATH_HAM);
         this.addDirectory("spam", PATH_SPAM);
         this.addDirectory("stopwords", PATH_ENG_STOPWORDS);
+<<<<<<< HEAD
         this.addDirectory("test", PATH_NON_CLASSIFIED); 
+=======
+        this.addDirectory("test", PATH_NON_CLASSIFIED); //MODIFIER: ajouter le chemin pour les données test
+        
+        // Balanced data
+        this.addDirectory("ham_400", PATH_BALANCED + "ham_400");
+        this.addDirectory("spam_400_a", PATH_BALANCED + "spam_400");
+        this.addDirectory("test_80", PATH_BALANCED + "test_80");
+        
+        // Undersampled data 
+        this.addDirectory("ham_100", PATH_UNDERSHAMPLED + "ham_100");
+        this.addDirectory("spam_460", PATH_UNDERSHAMPLED + "spam_460");
+        
+        // Oversampled data 
+        this.addDirectory("ham_2500", PATH_OVERSHAMPLED + "ham_2500");
+        this.addDirectory("spam_400_b", PATH_OVERSHAMPLED + "spam_400");
+        
+        // (ham_400, spam_400_a), (ham_100, spam_460), (ham_2500, spam_400_b)
+        
+>>>>>>> 243d7e273c5c6ad079d20fda3262a5729a38578e
     }
 
     /**
@@ -88,7 +113,7 @@ public class CatalogManager {
     public HashMap<String, ArrayList<String>> getMap(String directory) throws IOException{
         String path = this.fileDirectories.get(directory);
         if(path == null)
-            throw new IOException("Path does not exist!");
+            throw new IOException("Path does not exist: " + directory);
 
         Path p = Paths.get(path);
         
