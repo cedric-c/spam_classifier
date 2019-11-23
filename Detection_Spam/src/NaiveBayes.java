@@ -50,14 +50,14 @@ public class NaiveBayes {
 	
 	NaiveBayes(HashMap<String, ArrayList<String>> dictionnaire_Ham, HashMap<String, ArrayList<String>> dictionnaire_Spam,
 			HashMap<String, ArrayList<String>> invertedIndex_Ham, HashMap<String, ArrayList<String>> invertedIndex_Spam,
-			HashMap<String, ArrayList<String>> test_set, double lissage_NB, CatalogManager manager){
+			HashMap<String, ArrayList<String>> test_set, double lissage_NB, CatalogManager manager, ArrayList<String[]> statistics){
 		this.dictionnaire_Ham = dictionnaire_Ham;
 		this.dictionnaire_Spam = dictionnaire_Spam;
 		this.invertedIndex_Ham = invertedIndex_Ham;
 		this.invertedIndex_Spam = invertedIndex_Spam;
 		this.test_set = test_set;
 		this.lissage_NB = lissage_NB;
-		this.statistics.add(new String[] {"Test_courriel_ID", "Probability", "NB_Prediction", "Type_courriel_test", "Lissage"});
+		this.statistics = statistics;
 		this.manager = manager;
 	}
 	
@@ -138,7 +138,7 @@ public class NaiveBayes {
 			probSpam = calculateProbability(tokensDuCourriel, invertedIndex_Spam, dictionnaire_Spam, lissage)*prior_Spam;
 			
 			probHam = calculateProbability(tokensDuCourriel, invertedIndex_Ham, dictionnaire_Ham, lissage)*prior_Ham;
-			System.out.println("(spam,ham):("+probSpam + ","+probHam+")");
+			//System.out.println("(spam,ham):("+probSpam + ","+probHam+")");
 		
 			
 			//compare les probabilités et prendre celui qui est la plus grande lissage_NB
@@ -173,10 +173,10 @@ public class NaiveBayes {
 		
 	} //fin de la fonction classifierNB
 	
-	public void exportCSV(String path) {
+	public void exportCSV(String path, ArrayList<String[]> statistics_var) {
 		try {
 			//SimpleIO.writeStringsToFile("./src/out/my.csv", statistics);
-			SimpleIO.writeStringsToFile(path, statistics);
+			SimpleIO.writeStringsToFile(path, statistics_var);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -188,6 +188,6 @@ public class NaiveBayes {
 	
 	public HashMap<String, ArrayList<String>> getClassifier_Ham_Test() { return classifier_Ham_Test; }
 
-
+	public ArrayList<String[]> getStatistics() { return statistics; }
 }
 

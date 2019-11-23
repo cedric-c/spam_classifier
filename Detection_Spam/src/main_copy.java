@@ -20,7 +20,6 @@ public class main_copy {
 	protected static HashMap<String, ArrayList<String>> invertedIndex_Ham = new HashMap<String, ArrayList<String>>();
 	protected static HashMap<String, ArrayList<String>> invertedIndex_Spam = new HashMap<String, ArrayList<String>>();
 	
-	
 	/*
 	 * Inspiré de ce site web pour lire un fichier texte
 	 * https://www.geeksforgeeks.org/different-ways-reading-text-file-java/
@@ -104,6 +103,32 @@ public class main_copy {
 		
 	}
 	
+	public void removeStopWord(HashMap<String, ArrayList<String>> hm) throws Exception {
+		
+		String courriel_ID; //get la clé (ID du courriel)
+		ArrayList<String> tokensDuCourriel; //tokens du courriel
+		String token, stemToken;
+		
+		//itérer à travers de chaque courriel
+		for (Map.Entry mapElement : hm.entrySet()) { 
+            courriel_ID = (String)mapElement.getKey(); 
+            tokensDuCourriel = hm.get(courriel_ID); 
+            
+            //itérer à travers de chaque tokens dans le courriel
+			for (int j=0; j< tokensDuCourriel.size(); j++) {
+				
+				token = tokensDuCourriel.get(j);
+				if(!stopWord(token)) {
+					stemToken = stemming(token);
+					tokensDuCourriel.set(j, stemToken); //stem le mot
+				} else {
+					tokensDuCourriel.remove(j); //enlève ce token car c'est un stopWord
+				}
+			}
+        } 
+		
+	}
+	
 	
 	/*---------------------------------------------------------------------------------------*/
 	public HashMap<String, HashMap<String, ArrayList<String>>> Cedric() throws Exception {
@@ -125,33 +150,30 @@ public class main_copy {
         
         return c;
 	}
-	/*---------------------------------------------------------------------------------------*/
 	
-	public static void main(String[] args) throws Exception {
-		
-		main_copy a = new main_copy();
 	
-		 //------------------------- NAIVE BAYES (3 cas: balancé, undersampling, oversampling) ------------------------
-		/*
-		 * Cas 1: DossierA_Classe_Balancee
-		 * 		=> 400 hams, 400 spams, 80  courriels test
-		 * */
-		main cas1 = new main();
-		CatalogManager manager = new CatalogManager(1);
+	public void execute_NB(int Nombre_du_cas, String csvPath) throws Exception {
+
+		main_copy cas = new main_copy();
+		CatalogManager manager = new CatalogManager(Nombre_du_cas);
 		dictionnaire_Spam = manager.getMap("spam");
         dictionnaire_Ham  = manager.getMap("ham");
         test_set  = manager.getMap("test");
         
+        cas.removeStopWord(test_set);
+        
         System.out.println("dictionnaire_Spam: " + dictionnaire_Spam.size());
         System.out.println("dictionnaire_Ham: " + dictionnaire_Ham.size());
         
-        cas1.traitementDeDonnees(dictionnaire_Ham, invertedIndex_Ham);
-        cas1.traitementDeDonnees(dictionnaire_Spam, invertedIndex_Spam);
+        cas.traitementDeDonnees(dictionnaire_Ham, invertedIndex_Ham);
+        cas.traitementDeDonnees(dictionnaire_Spam, invertedIndex_Spam);
         
         /*
          * a) aucun lissage
          * */
-        NaiveBayes nb1a = new NaiveBayes(dictionnaire_Ham, dictionnaire_Spam, invertedIndex_Ham, invertedIndex_Spam, test_set, 0, manager);
+        ArrayList<String[]> statistics = new ArrayList<String[]>();
+        statistics.add(new String[] {"Test_courriel_ID", "Probability", "NB_Prediction", "Type_courriel_test", "Lissage"});
+        NaiveBayes nb1a = new NaiveBayes(dictionnaire_Ham, dictionnaire_Spam, invertedIndex_Ham, invertedIndex_Spam, test_set, 0, manager, statistics);
         nb1a.classifierNB(false); //lissage
         
         HashMap<String, ArrayList<String>> classifier_Ham_Test = nb1a.getClassifier_Ham_Test();
@@ -159,14 +181,13 @@ public class main_copy {
         
         System.out.println("classifier_Ham_Test: " + classifier_Ham_Test.size());
         System.out.println("classifier_Spam_Test: " + classifier_Spam_Test.size());
-        
-        nb1a.exportCSV("./src/out/NaiveBayes_cas1a.csv");
-	 
+       
         /*
          * b) lissage avec paramètre de 0,1
          * */
         
-        NaiveBayes nb_cas1b = new NaiveBayes(dictionnaire_Ham, dictionnaire_Spam, invertedIndex_Ham, invertedIndex_Spam, test_set,0.1, manager);
+        statistics = nb1a.getStatistics();
+        NaiveBayes nb_cas1b = new NaiveBayes(dictionnaire_Ham, dictionnaire_Spam, invertedIndex_Ham, invertedIndex_Spam, test_set,0.1, manager, statistics);
         nb_cas1b.classifierNB(true); //lissage
         
         HashMap<String, ArrayList<String>> classifier_Ham_Test_1b = nb_cas1b.getClassifier_Ham_Test();
@@ -175,12 +196,11 @@ public class main_copy {
         System.out.println("classifier_Ham_Test: " + classifier_Ham_Test_1b.size());
         System.out.println("classifier_Spam_Test: " + classifier_Spam_Test_1b.size());
         
-        nb_cas1b.exportCSV("./src/out/NaiveBayes_cas1b.csv");
-        
         /*
          * c) lissage avec paramètre de 1
          * */
-        NaiveBayes nb_cas1c = new NaiveBayes(dictionnaire_Ham, dictionnaire_Spam, invertedIndex_Ham, invertedIndex_Spam, test_set,0.1, manager);
+        statistics = nb_cas1b.getStatistics();
+        NaiveBayes nb_cas1c = new NaiveBayes(dictionnaire_Ham, dictionnaire_Spam, invertedIndex_Ham, invertedIndex_Spam, test_set,1, manager, statistics);
         nb_cas1c.classifierNB(true); //lissage
         
         HashMap<String, ArrayList<String>> classifier_Ham_Test_1c = nb_cas1c.getClassifier_Ham_Test();
@@ -189,20 +209,29 @@ public class main_copy {
         System.out.println("classifier_Ham_Test: " + classifier_Ham_Test_1c.size());
         System.out.println("classifier_Spam_Test: " + classifier_Spam_Test_1c.size());
         
-        nb_cas1c.exportCSV("./src/out/NaiveBayes_cas1c.csv");
-        
-        /*---------------------------------------------------------------------------------------*/
-        
+        nb_cas1c.exportCSV(csvPath, statistics);
+	}
+	
+	public static void main(String[] args) throws Exception {
+		
+		main_copy main = new main_copy();
+	
+		/*
+		 * Cas 1: DossierA_Classe_Balancee
+		 * 		=> 400 hams, 400 spams, 80  courriels test
+		 * */
+		main.execute_NB(1, "./src/out/NaiveBayes/NB_Cas1.csv");
+		
 		/*
 		 * Cas 2: DossierB_Undersampling_Ham
 		 * 		=> 100 hams, 460 spams, 80  courriels test
 		 * */
-        
-        /*---------------------------------------------------------------------------------------*/
+		main.execute_NB(2, "./src/out/NaiveBayes/NB_Cas2.csv");
         
 		/*
 		 * Cas 3: DossierC_Oversampling_Ham
 		 * 		=> 2 500 hams, 400 spams, 80  courriels test
 		 * */
+		main.execute_NB(3, "./src/out/NaiveBayes/NB_Cas3.csv");
 	}	
 }

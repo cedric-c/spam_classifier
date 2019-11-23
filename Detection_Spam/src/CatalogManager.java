@@ -23,9 +23,9 @@ public class CatalogManager {
 
     private HashMap<String, String> fileDirectories;
 
-    private ArrayList<String> spamFiles;
+    private ArrayList<String> spamFiles = new ArrayList<String>(); //déterminer si le courriel test était un spam avant qu'on a séparé le training et test
     
-    public CatalogManager(int cas) {
+    public CatalogManager(int cas) throws IOException {
     	if (cas == 1) {
     		/*
     		 * Cas 1: DossierA_Classe_Balancee
@@ -66,9 +66,11 @@ public class CatalogManager {
             this.addDirectory("stopwords", PATH_ENG_STOPWORDS);
             this.addDirectory("test", PATH_NON_CLASSIFIED); 
     	}
+    	
+    	putAllSpamFilesBeforeSplit();
     }
     
-    public CatalogManager() {
+    public CatalogManager() throws IOException {
         this.fileDirectories = new HashMap<String, String>();
         this.addDirectory("ham", PATH_HAM);
         this.addDirectory("spam", PATH_SPAM);
@@ -91,7 +93,7 @@ public class CatalogManager {
         this.addDirectory("spam_400_b", PATH_OVERSHAMPLED + "spam_400");
         
         // (ham_400, spam_400_a), (ham_100, spam_460), (ham_2500, spam_400_b)
-        
+        putAllSpamFilesBeforeSplit();
     }
 
     /**
@@ -110,7 +112,7 @@ public class CatalogManager {
      * @throws IOException
      */
     public boolean isSpam(String emailName) throws IOException {
-    	
+    	//System.out.print("spamFiles.size(): " + spamFiles.size());
     	if(this.spamFiles == null)
     		this.spamFiles = new ArrayList<String>();
     	else
@@ -167,6 +169,29 @@ public class CatalogManager {
         return contents;
 
     }
+    
+    
+    public void putAllSpamFilesBeforeSplit() throws IOException{
+        String path = "./src/data/ham-and-spam-dataset/hamnspam/spam/";
+        if(path == null)
+            throw new IOException("Path does not exist: ");
+
+        Path p = Paths.get(path);
+        
+        ArrayList<Path> paths = Files.list(p).collect(Collectors.toCollection(ArrayList::new));
+        		
+        HashMap<String, ArrayList<String>> contents = new HashMap<String, ArrayList<String>>();
+        for(Path f : paths) {
+        	try {
+        		String name = f.getFileName().toString();
+        		spamFiles.add(name);
+        	}catch(Exception e) {
+        	}
+        	
+        }
+
+    }
+    
     
     /**
      * Returns records, up to a maximum of limit
