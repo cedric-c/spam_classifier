@@ -127,7 +127,7 @@ public class main {
 	}
 	/*---------------------------------------------------------------------------------------*/
 	
-	public static void runKNN(String mapKeyHam, String mapKeySpam, String saveFileName) throws Exception {
+	public static String runKNN(String mapKeyHam, String mapKeySpam, String saveFileName) throws Exception {
 		main a = new main();
 		
 		// (ham_400, spam_400_a), (ham_100, spam_460), (ham_2500, spam_400_b)
@@ -172,8 +172,10 @@ public class main {
               }
   		}
   		
-  		knn.exportCSV(saveFileName + "_" + time + ".csv");
-  		System.out.println("FINI");
+  		String f = saveFileName + "_" + time + ".csv";
+  		knn.exportCSV(f);
+  		System.out.println("FINI: " + f);
+  		return f;
 	}
 	
 	public static void main(String[] args) throws Exception {
