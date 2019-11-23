@@ -23,11 +23,57 @@ public class CatalogManager {
 
     private HashMap<String, String> fileDirectories;
 
+    
+    public CatalogManager(int cas) {
+    	if (cas == 1) {
+    		/*
+    		 * Cas 1: DossierA_Classe_Balancee
+    		 * 		=> 400 hams, 400 spams, 80  courriels test
+    		 * */
+            this.fileDirectories = new HashMap<String, String>();
+            this.addDirectory("ham", "./src/data/DossierA_Classe_Balancee/ham_2500/");
+            this.addDirectory("spam", "./src/data/DossierA_Classe_Balancee/spam_400/");
+            this.addDirectory("test", "./src/data/DossierA_Classe_Balancee/test_80/"); 
+            this.addDirectory("stopwords", PATH_ENG_STOPWORDS);
+            
+    	} else if (cas == 2) {
+    		/*
+    		 * Cas 2: DossierB_Undersampling_Ham
+    		 * 		=> 100 hams, 460 spams, 80  courriels test
+    		 * */
+            this.fileDirectories = new HashMap<String, String>();
+            this.addDirectory("ham", "./src/data/DossierB_Undersampling_Ham/ham_100/");
+            this.addDirectory("spam", "./src/data/DossierB_Undersampling_Ham/spam_460/");
+            this.addDirectory("test", "./src/data/DossierB_Undersampling_Ham/test_80/"); 
+            this.addDirectory("stopwords", PATH_ENG_STOPWORDS);
+            
+    	} else if (cas == 3) {
+    		/*
+    		 * Cas 3: DossierC_Oversampling_Ham
+    		 * 		=> 2 500 hams, 400 spams, 80  courriels test
+    		 * */
+            this.fileDirectories = new HashMap<String, String>();
+            this.addDirectory("ham", "./src/data/DossierC_Oversampling_Ham/ham_2500/");
+            this.addDirectory("spam", "./src/data/DossierC_Oversampling_Ham/spam_400/");
+            this.addDirectory("test", "./src/data/DossierC_Oversampling_Ham/test_80/"); 
+            this.addDirectory("stopwords", PATH_ENG_STOPWORDS);
+    		
+    	} else {
+            this.fileDirectories = new HashMap<String, String>();
+            this.addDirectory("ham", PATH_HAM);
+            this.addDirectory("spam", PATH_SPAM);
+            this.addDirectory("stopwords", PATH_ENG_STOPWORDS);
+            this.addDirectory("test", PATH_NON_CLASSIFIED); 
+    	}
+    }
+    
     public CatalogManager() {
         this.fileDirectories = new HashMap<String, String>();
         this.addDirectory("ham", PATH_HAM);
         this.addDirectory("spam", PATH_SPAM);
         this.addDirectory("stopwords", PATH_ENG_STOPWORDS);
+
+        this.addDirectory("test", PATH_NON_CLASSIFIED); 
         this.addDirectory("test", PATH_NON_CLASSIFIED); //MODIFIER: ajouter le chemin pour les données test
         
         // Balanced data
