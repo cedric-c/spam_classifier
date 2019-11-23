@@ -2,7 +2,7 @@
 import java.util.*; 
 import java.io.File; //lire fichier externe
 
-public class main {
+public class main_copy {
 	
 	Set<String> uniqueTokens = new HashSet<String>();
 	
@@ -128,27 +128,25 @@ public class main {
 	/*---------------------------------------------------------------------------------------*/
 	
 	public static void main(String[] args) throws Exception {
+		
+		main_copy a = new main_copy();
 	
 		 //------------------------- NAIVE BAYES (3 cas: balancé, undersampling, oversampling) ------------------------
 		/*
 		 * Cas 1: DossierA_Classe_Balancee
 		 * 		=> 400 hams, 400 spams, 80  courriels test
 		 * */
-		main cas1 = new main();
 		CatalogManager manager = new CatalogManager();
-		dictionnaire_Spam = manager.getMap("spam");
-        dictionnaire_Ham  = manager.getMap("ham");
-        test_set  = manager.getMap("test");
+		dictionnaire_Spam = manager.getMap("spam", 400);
+        dictionnaire_Ham  = manager.getMap("ham", 600);
+        test_set  = manager.getMap("test"); //MODIFIER: ajouter cette ligne
         
         System.out.println("dictionnaire_Spam: " + dictionnaire_Spam.size());
         System.out.println("dictionnaire_Ham: " + dictionnaire_Ham.size());
         
-        cas1.traitementDeDonnees(dictionnaire_Ham, invertedIndex_Ham);
-        cas1.traitementDeDonnees(dictionnaire_Spam, invertedIndex_Spam);
+        a.traitementDeDonnees(dictionnaire_Ham, invertedIndex_Ham);
+        a.traitementDeDonnees(dictionnaire_Spam, invertedIndex_Spam);
         
-        /*
-         * a) aucun lissage
-         * */
         NaiveBayes nb = new NaiveBayes(dictionnaire_Ham, dictionnaire_Spam, invertedIndex_Ham, invertedIndex_Spam, test_set,0.7);
         nb.classifierNB(true); //lissage
         
@@ -158,15 +156,6 @@ public class main {
         System.out.println("classifier_Ham_Test: " + classifier_Ham_Test.size());
         System.out.println("classifier_Spam_Test: " + classifier_Spam_Test.size());
 	 
-        /*
-         * b) lissage avec paramètre de 0,1
-         * */
-        
-        /*
-         * c) lissage avec paramètre de 1
-         * */
-        
-        
 		/*
 		 * Cas 2: DossierB_Undersampling_Ham
 		 * 		=> 100 hams, 460 spams, 80  courriels test
