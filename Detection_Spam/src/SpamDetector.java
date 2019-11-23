@@ -11,7 +11,7 @@ public class SpamDetector {
 	 * Run k-NN with Spam and Ham emails
 	 * @throws IOException
 	 */
-	public static void KNNSpam() throws IOException{
+	public static void KNNSpam() throws IOException {
         
         CatalogManager manager = new CatalogManager();
         HashMap<String, ArrayList<String>> spam = manager.getMap("spam");
@@ -155,21 +155,7 @@ public class SpamDetector {
         return statistics;
 	}
 	
-	public static void Catherine() {
-		try {
-			main a = new main();
-			HashMap<String, HashMap<String, ArrayList<String>>> maps = a.Cedric();
-			HashMap<String, ArrayList<String>> iSpam = maps.get("iSpam");
-			HashMap<String, ArrayList<String>> iHam = maps.get("iHam");
-			System.out.println("Hello World!");
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
 	public static void main(String[] args) {
-
-		Catherine();
 		
 		System.exit(0);
 		

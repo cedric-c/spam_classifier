@@ -75,19 +75,22 @@ public class main {
 	}
 	
 	/*
+	 * Creates inverted index
 	 * Inspirer de ce site web pour itérer à travers d'un hashmap
 	 * https://www.geeksforgeeks.org/traverse-through-a-hashmap-in-java/
 	 * */
-	public void traitementDeDonnees(HashMap<String, ArrayList<String>> dictionnaire, HashMap<String, ArrayList<String>> invertedIndex) throws Exception {
+	public HashMap<String, ArrayList<String>> getInvertedIndex(HashMap<String, ArrayList<String>> emailTokens) throws Exception {
 		
 		String courriel_ID; //get la clé (ID du courriel)
 		ArrayList<String> tokensDuCourriel; //tokens du courriel
 		String token, stemToken;
 		
+		HashMap<String, ArrayList<String>> invertedIndex = new HashMap<String, ArrayList<String>>();
+		
 		//itérer à travers de chaque courriel
-		for (Map.Entry mapElement : dictionnaire.entrySet()) { 
+		for (Map.Entry mapElement : emailTokens.entrySet()) { 
             courriel_ID = (String)mapElement.getKey(); 
-            tokensDuCourriel = dictionnaire.get(courriel_ID); 
+            tokensDuCourriel = emailTokens.get(courriel_ID); 
             
             //itérer à travers de chaque tokens dans le courriel
 			for (int j=0; j< tokensDuCourriel.size(); j++) {
@@ -101,31 +104,12 @@ public class main {
 					tokensDuCourriel.remove(j); //enlève ce token car c'est un stopWord
 				}
 			}
-        } 
+        }
+		
+		return invertedIndex;
 		
 	}
 	
-	
-	/*---------------------------------------------------------------------------------------*/
-	public HashMap<String, HashMap<String, ArrayList<String>>> Cedric() throws Exception {
-		CatalogManager manager = new CatalogManager();
-		dictionnaire_Spam = manager.getMap("spam", 400);
-        dictionnaire_Ham  = manager.getMap("ham", 600);
-        test_set  = manager.getMap("test"); //MODIFIER: ajouter cette ligne
-        
-        
-        // Merci Catherine
-        HashMap<String, HashMap<String, ArrayList<String>>> 
-        	c = new HashMap<String, HashMap<String, ArrayList<String>>>();
-        
-        traitementDeDonnees(dictionnaire_Ham, invertedIndex_Ham);
-        traitementDeDonnees(dictionnaire_Spam, invertedIndex_Spam);
-        
-        c.put("iSpam", invertedIndex_Spam);
-        c.put("iHam", invertedIndex_Ham);
-        
-        return c;
-	}
 	/*---------------------------------------------------------------------------------------*/
 	
 	public static String runKNN(String mapKeyHam, String mapKeySpam, String saveFileName) throws Exception {
@@ -145,8 +129,8 @@ public class main {
         // CHANGE THE FILENAME FOR SAVING DATA
 //        String filename = "400.csv";
         
-        a.traitementDeDonnees(dictionnaire_Ham, invertedIndex_Ham);
-        a.traitementDeDonnees(dictionnaire_Spam, invertedIndex_Spam);
+        invertedIndex_Ham = a.getInvertedIndex(dictionnaire_Ham);
+        invertedIndex_Spam = a.getInvertedIndex(dictionnaire_Spam);
         
         
         
@@ -191,14 +175,15 @@ public class main {
 		CatalogManager manager = new CatalogManager();
 		long time = System.nanoTime();
 	
+		
 
-		dictionnaire_Spam = manager.getMap("spam");
-        dictionnaire_Ham  = manager.getMap("ham");
+		HashMap<String, ArrayList<String>> spam = manager.getMap("spam");
+		HashMap<String, ArrayList<String>> ham  = manager.getMap("ham");
         
         test_set  = manager.getMap("test_80"); //MODIFIER: ajouter cette ligne
 
-        a.traitementDeDonnees(dictionnaire_Ham, invertedIndex_Ham);
-        a.traitementDeDonnees(dictionnaire_Spam, invertedIndex_Spam);
+        invertedIndex_Ham = a.getInvertedIndex(ham);
+        invertedIndex_Spam = a.getInvertedIndex(spam);
         
         
         
@@ -263,8 +248,8 @@ public class main {
         System.out.println("dictionnaire_Spam: " + dictionnaire_Spam.size());
         System.out.println("dictionnaire_Ham: " + dictionnaire_Ham.size());
         
-        cas1.traitementDeDonnees(dictionnaire_Ham, invertedIndex_Ham);
-        cas1.traitementDeDonnees(dictionnaire_Spam, invertedIndex_Spam);
+        invertedIndex_Ham = cas1.getInvertedIndex(dictionnaire_Ham);
+        invertedIndex_Spam = cas1.getInvertedIndex(dictionnaire_Spam);
         
         /*
          * a) aucun lissage
