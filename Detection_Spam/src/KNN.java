@@ -94,7 +94,8 @@ public class KNN {
 		Set<String> test_train_emailID = new HashSet<String>();
 		test_train_emailID.add(courriel1_ID);
 		test_train_emailID.add(courriel2_ID);
-		distance.put(test_train_emailID, distance(email1_10, email2_10));
+		distance.put(test_train_emailID, distance(email1_10, email2_10)); // HashMap (HashSet , Double)
+		// Hashset => (email1, email2)
 	
 		
 		statistics.add(new String[] { courriel1_ID, courriel2_ID, String.valueOf(distance(email1_10, email2_10)), type });

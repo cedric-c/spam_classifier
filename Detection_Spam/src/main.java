@@ -180,6 +180,10 @@ public class main {
 		HashMap<String, ArrayList<String>> spam = manager.getMap("spam");
 		HashMap<String, ArrayList<String>> ham  = manager.getMap("ham");
         
+		
+		
+		
+		
         test_set  = manager.getMap("test_80"); //MODIFIER: ajouter cette ligne
 
         invertedIndex_Ham = a.getInvertedIndex(ham);
@@ -240,7 +244,7 @@ public class main {
 		 * 		=> 400 hams, 400 spams, 80  courriels test
 		 * */
 		main cas1 = new main();
-		CatalogManager manager = new CatalogManager();
+		CatalogManager manager = new CatalogManager(1);
 		dictionnaire_Spam = manager.getMap("spam");
         dictionnaire_Ham  = manager.getMap("ham");
         test_set  = manager.getMap("test");
