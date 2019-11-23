@@ -127,15 +127,20 @@ public class main {
 	}
 	/*---------------------------------------------------------------------------------------*/
 	
-	public static void main(String[] args) throws Exception {
-		
+	public static void runKNN(String mapKeyHam, String mapKeySpam, String saveFileName) throws Exception {
 		main a = new main();
 		
+		// (ham_400, spam_400_a), (ham_100, spam_460), (ham_2500, spam_400_b)
 		CatalogManager manager = new CatalogManager();
-		dictionnaire_Spam = manager.getMap("spam", 300);
-        dictionnaire_Ham  = manager.getMap("ham", 300);
-        test_set  = manager.getMap("test"); //MODIFIER: ajouter cette ligne
+		
+		long time = System.nanoTime();
+		
+		dictionnaire_Spam = manager.getMap(mapKeySpam);
+        dictionnaire_Ham  = manager.getMap(mapKeyHam);
+        test_set  = manager.getMap("test_80"); //MODIFIER: ajouter cette ligne
 
+        // CHANGE THE FILENAME FOR SAVING DATA
+//        String filename = "400.csv";
         
         a.traitementDeDonnees(dictionnaire_Ham, invertedIndex_Ham);
         a.traitementDeDonnees(dictionnaire_Spam, invertedIndex_Spam);
@@ -167,8 +172,20 @@ public class main {
               }
   		}
   		
-  		knn.exportCSV();
+  		knn.exportCSV(saveFileName + "_" + time + ".csv");
   		System.out.println("FINI");
+	}
+	
+	public static void main(String[] args) throws Exception {
+		
+		
+		String[] hams = new String[] {"ham_400", "ham_100", "ham_2500"};
+		String[] spams = new String[] {"spam_400_a", "spam_460", "spam_400_b"};
+		String[] filenames = new String[] {"balanced", "undersampled", "oversampled"};
+		
+		for(int i = 0; i < filenames.length; i++) {
+			runKNN(hams[i], spams[i], filenames[i]);
+		}
   		
   		//HashMap<Set, Double> distance = knn.getDistance();
   		//System.out.println(distance.size());

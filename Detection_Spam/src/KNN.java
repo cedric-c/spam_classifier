@@ -109,6 +109,15 @@ public class KNN {
 		}
 
 	}
+
+	public void exportCSV(String filename) {
+		try {
+			SimpleIO.writeStringsToFile("./src/out/" + filename, statistics);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
 	
 	public double distance(int[] X1, int[] X2){
 		int dims = X1.length;
