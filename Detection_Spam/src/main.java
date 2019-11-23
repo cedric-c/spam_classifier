@@ -269,7 +269,7 @@ public class main {
         /*
          * a) aucun lissage
          * */
-        NaiveBayes nb = new NaiveBayes(dictionnaire_Ham, dictionnaire_Spam, invertedIndex_Ham, invertedIndex_Spam, test_set,0.7);
+        NaiveBayes nb = new NaiveBayes(dictionnaire_Ham, dictionnaire_Spam, invertedIndex_Ham, invertedIndex_Spam, test_set,0.7, manager);
         nb.classifierNB(true); //lissage
         
         HashMap<String, ArrayList<String>> classifier_Ham_Test = nb.getClassifier_Ham_Test();

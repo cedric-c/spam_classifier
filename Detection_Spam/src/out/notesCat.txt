@@ -4,7 +4,7 @@ Probability
 NB_Prediction	
 Type_courriel_test
 Lissage
-
+this.statistics.add(new String[] {"Test_courriel_ID", "Probability", "NB_Prediction", "Type_courriel_test", "Lissage"});
 
 KNN - Tester ma fonction
 		CatalogManager manager = new CatalogManager();

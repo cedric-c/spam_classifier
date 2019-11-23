@@ -136,31 +136,69 @@ public class main_copy {
 		 * Cas 1: DossierA_Classe_Balancee
 		 * 		=> 400 hams, 400 spams, 80  courriels test
 		 * */
-		CatalogManager manager = new CatalogManager();
-		dictionnaire_Spam = manager.getMap("spam", 400);
-        dictionnaire_Ham  = manager.getMap("ham", 600);
-        test_set  = manager.getMap("test"); //MODIFIER: ajouter cette ligne
+		main cas1 = new main();
+		CatalogManager manager = new CatalogManager(1);
+		dictionnaire_Spam = manager.getMap("spam");
+        dictionnaire_Ham  = manager.getMap("ham");
+        test_set  = manager.getMap("test");
         
         System.out.println("dictionnaire_Spam: " + dictionnaire_Spam.size());
         System.out.println("dictionnaire_Ham: " + dictionnaire_Ham.size());
         
-        a.traitementDeDonnees(dictionnaire_Ham, invertedIndex_Ham);
-        a.traitementDeDonnees(dictionnaire_Spam, invertedIndex_Spam);
+        cas1.traitementDeDonnees(dictionnaire_Ham, invertedIndex_Ham);
+        cas1.traitementDeDonnees(dictionnaire_Spam, invertedIndex_Spam);
         
-        NaiveBayes nb = new NaiveBayes(dictionnaire_Ham, dictionnaire_Spam, invertedIndex_Ham, invertedIndex_Spam, test_set,0.7);
-        nb.classifierNB(true); //lissage
+        /*
+         * a) aucun lissage
+         * */
+        NaiveBayes nb1a = new NaiveBayes(dictionnaire_Ham, dictionnaire_Spam, invertedIndex_Ham, invertedIndex_Spam, test_set, 0, manager);
+        nb1a.classifierNB(false); //lissage
         
-        HashMap<String, ArrayList<String>> classifier_Ham_Test = nb.getClassifier_Ham_Test();
-        HashMap<String, ArrayList<String>> classifier_Spam_Test = nb.getClassifier_Spam_Test();
+        HashMap<String, ArrayList<String>> classifier_Ham_Test = nb1a.getClassifier_Ham_Test();
+        HashMap<String, ArrayList<String>> classifier_Spam_Test = nb1a.getClassifier_Spam_Test();
         
         System.out.println("classifier_Ham_Test: " + classifier_Ham_Test.size());
         System.out.println("classifier_Spam_Test: " + classifier_Spam_Test.size());
+        
+        nb1a.exportCSV("./src/out/NaiveBayes_cas1a.csv");
 	 
+        /*
+         * b) lissage avec paramètre de 0,1
+         * */
+        
+        NaiveBayes nb_cas1b = new NaiveBayes(dictionnaire_Ham, dictionnaire_Spam, invertedIndex_Ham, invertedIndex_Spam, test_set,0.1, manager);
+        nb_cas1b.classifierNB(true); //lissage
+        
+        HashMap<String, ArrayList<String>> classifier_Ham_Test_1b = nb_cas1b.getClassifier_Ham_Test();
+        HashMap<String, ArrayList<String>> classifier_Spam_Test_1b = nb_cas1b.getClassifier_Spam_Test();
+        
+        System.out.println("classifier_Ham_Test: " + classifier_Ham_Test_1b.size());
+        System.out.println("classifier_Spam_Test: " + classifier_Spam_Test_1b.size());
+        
+        nb_cas1b.exportCSV("./src/out/NaiveBayes_cas1b.csv");
+        
+        /*
+         * c) lissage avec paramètre de 1
+         * */
+        NaiveBayes nb_cas1c = new NaiveBayes(dictionnaire_Ham, dictionnaire_Spam, invertedIndex_Ham, invertedIndex_Spam, test_set,0.1, manager);
+        nb_cas1c.classifierNB(true); //lissage
+        
+        HashMap<String, ArrayList<String>> classifier_Ham_Test_1c = nb_cas1c.getClassifier_Ham_Test();
+        HashMap<String, ArrayList<String>> classifier_Spam_Test_1c = nb_cas1c.getClassifier_Spam_Test();
+        
+        System.out.println("classifier_Ham_Test: " + classifier_Ham_Test_1c.size());
+        System.out.println("classifier_Spam_Test: " + classifier_Spam_Test_1c.size());
+        
+        nb_cas1c.exportCSV("./src/out/NaiveBayes_cas1c.csv");
+        
+        /*---------------------------------------------------------------------------------------*/
+        
 		/*
 		 * Cas 2: DossierB_Undersampling_Ham
 		 * 		=> 100 hams, 460 spams, 80  courriels test
 		 * */
         
+        /*---------------------------------------------------------------------------------------*/
         
 		/*
 		 * Cas 3: DossierC_Oversampling_Ham

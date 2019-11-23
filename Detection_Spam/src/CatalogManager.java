@@ -32,7 +32,7 @@ public class CatalogManager {
     		 * 		=> 400 hams, 400 spams, 80  courriels test
     		 * */
             this.fileDirectories = new HashMap<String, String>();
-            this.addDirectory("ham", "./src/data/DossierA_Classe_Balancee/ham_2500/");
+            this.addDirectory("ham", "./src/data/DossierA_Classe_Balancee/ham_400/");
             this.addDirectory("spam", "./src/data/DossierA_Classe_Balancee/spam_400/");
             this.addDirectory("test", "./src/data/DossierA_Classe_Balancee/test_80/"); 
             this.addDirectory("stopwords", PATH_ENG_STOPWORDS);

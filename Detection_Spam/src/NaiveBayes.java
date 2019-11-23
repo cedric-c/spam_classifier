@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -29,6 +30,9 @@ public class NaiveBayes {
 	protected static HashMap<String, ArrayList<String>> classifier_Spam_Test = new HashMap<String, ArrayList<String>> (); //courriel de l'ensemble test à été classifié en tant que spam
 	
 	protected static HashMap<String, ArrayList<String>> test_set; //clé:courriel de l'ensemble test (pas encore classifié); valeur:tokens après le traitement de données
+	protected static ArrayList<String[]> statistics = new ArrayList<String[]>();
+	
+	protected static CatalogManager manager;
 	
 	protected static double lissage_NB = 0;
 
@@ -40,19 +44,21 @@ public class NaiveBayes {
 		this.invertedIndex_Ham = invertedIndex_Ham;
 		this.invertedIndex_Spam = invertedIndex_Spam;
 		this.test_set = test_set;
+	    this.statistics.add(new String[] {"Test_courriel_ID", "Probability", "NB_Prediction", "Type_courriel_test", "Lissage"});
 		
 	}
 	
 	NaiveBayes(HashMap<String, ArrayList<String>> dictionnaire_Ham, HashMap<String, ArrayList<String>> dictionnaire_Spam,
 			HashMap<String, ArrayList<String>> invertedIndex_Ham, HashMap<String, ArrayList<String>> invertedIndex_Spam,
-			HashMap<String, ArrayList<String>> test_set, double lissage_NB){
+			HashMap<String, ArrayList<String>> test_set, double lissage_NB, CatalogManager manager){
 		this.dictionnaire_Ham = dictionnaire_Ham;
 		this.dictionnaire_Spam = dictionnaire_Spam;
 		this.invertedIndex_Ham = invertedIndex_Ham;
 		this.invertedIndex_Spam = invertedIndex_Spam;
 		this.test_set = test_set;
 		this.lissage_NB = lissage_NB;
-		
+		this.statistics.add(new String[] {"Test_courriel_ID", "Probability", "NB_Prediction", "Type_courriel_test", "Lissage"});
+		this.manager = manager;
 	}
 	
 	private double calculateProbability(ArrayList<String> test_tokens, HashMap<String, ArrayList<String>> invertedIndex, HashMap<String, ArrayList<String>> dictionnaire, boolean lissage) {
@@ -113,7 +119,7 @@ public class NaiveBayes {
 	
 	
 	//classifie les données de l'ensemble test avec la méthode Naive Bayes
-	public void classifierNB(boolean lissage) {
+	public void classifierNB(boolean lissage) throws IOException {
 			
 		double prior_Spam = getPriors("spam"); //priori de la classe spam
 		double prior_Ham = getPriors("ham"); //priori de la classe ham
@@ -135,19 +141,47 @@ public class NaiveBayes {
 			System.out.println("(spam,ham):("+probSpam + ","+probHam+")");
 		
 			
-			//compare les probabilités et prendre celui qui est la plus grande
+			//compare les probabilités et prendre celui qui est la plus grande lissage_NB
 			if (probSpam > probHam) {
 				classifier_Spam_Test.put(courriel_ID, tokensDuCourriel);
+				
+				if(manager.isSpam(courriel_ID)) {
+					statistics.add(new String[] { courriel_ID, String.valueOf(probSpam), "spam", "spam", String.valueOf(lissage_NB)});
+				} else {
+					statistics.add(new String[] { courriel_ID, String.valueOf(probSpam), "spam", "ham", String.valueOf(lissage_NB)});
+				}
+				
 			} else if (probSpam < probHam){
 				classifier_Ham_Test.put(courriel_ID, tokensDuCourriel);
+				
+				if(manager.isSpam(courriel_ID)) {
+					statistics.add(new String[] { courriel_ID, String.valueOf(probHam), "ham", "spam", String.valueOf(lissage_NB)});
+				} else {
+					statistics.add(new String[] { courriel_ID, String.valueOf(probHam), "ham", "ham", String.valueOf(lissage_NB)});
+				}
+				
 			} else {
-				//System.out.println("probSpam == probHam: " + courriel_ID);
 				classifier_Spam_Test.put(courriel_ID, tokensDuCourriel); //si il n'y a pas de prob max, on va supposé aléatoirement que c'est un spam
+				
+				if(manager.isSpam(courriel_ID)) {
+					statistics.add(new String[] { courriel_ID, String.valueOf(probSpam), "spam", "spam", String.valueOf(lissage_NB)});
+				} else {
+					statistics.add(new String[] { courriel_ID, String.valueOf(probSpam), "spam", "ham", String.valueOf(lissage_NB)});
+				}
 			}
 		}
 		
 	} //fin de la fonction classifierNB
 	
+	public void exportCSV(String path) {
+		try {
+			//SimpleIO.writeStringsToFile("./src/out/my.csv", statistics);
+			SimpleIO.writeStringsToFile(path, statistics);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
 	
 	/* Getters */
 	public HashMap<String, ArrayList<String>> getClassifier_Spam_Test() { return classifier_Spam_Test; }
