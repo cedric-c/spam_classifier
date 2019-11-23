@@ -1,6 +1,7 @@
 
 import java.util.*; 
 import java.io.File; //lire fichier externe
+import java.io.IOException;
 
 public class main {
 	
@@ -180,6 +181,55 @@ public class main {
   		return f;
 	}
 	
+	/**
+	 * Runs K-NN using provided parameters.
+	 * @param trainSize
+	 * @param testSize
+	 * @param K
+	 */
+	public static void runKNN(double trainSize, double testSize, int K, main a) throws Exception {
+		CatalogManager manager = new CatalogManager();
+		long time = System.nanoTime();
+	
+
+		dictionnaire_Spam = manager.getMap("spam");
+        dictionnaire_Ham  = manager.getMap("ham");
+        
+        test_set  = manager.getMap("test_80"); //MODIFIER: ajouter cette ligne
+
+        a.traitementDeDonnees(dictionnaire_Ham, invertedIndex_Ham);
+        a.traitementDeDonnees(dictionnaire_Spam, invertedIndex_Spam);
+        
+        
+        
+        System.out.println("kNN");
+        KNN knn = new KNN(invertedIndex_Ham, invertedIndex_Spam);
+		
+		String courriel_ID_test, courriel_ID_Spam, courriel_ID_Ham; //get la clé (ID du courriel)
+		ArrayList<String> tokensDuCourriel; //tokens du courriel
+		String token, stemToken;
+
+      //itérer à travers de chaque courriel du test set
+  		for (Map.Entry mapElement : test_set.entrySet()) { 
+              courriel_ID_test = (String)mapElement.getKey(); 
+              tokensDuCourriel = test_set.get(courriel_ID_test); //arrayList avec tous les mots du courriel test
+              
+              for (Map.Entry mapElement2 : dictionnaire_Ham.entrySet()) {
+            	  courriel_ID_Ham = (String)mapElement2.getKey(); 
+            	  knn.getTable("ham",courriel_ID_test, courriel_ID_Ham, tokensDuCourriel, dictionnaire_Ham.get(courriel_ID_Ham));
+              }
+              
+              for (Map.Entry mapElement3 : dictionnaire_Spam.entrySet()) {
+            	  courriel_ID_Spam = (String)mapElement3.getKey(); 
+  				knn.getTable("spam", courriel_ID_test, courriel_ID_Spam, tokensDuCourriel, dictionnaire_Spam.get(courriel_ID_Spam));
+              }
+  		}
+  		
+  		String f = "saveFileName" + "_" + time + ".csv";
+  		knn.exportCSV(f);
+  		System.out.println("FINI: " + f);	
+	}
+	
 	public static void main(String[] args) throws Exception {
 		
 		/**
@@ -190,7 +240,7 @@ public class main {
 		 */
 		String[] hams = new String[] {"ham_400", "ham_100", "ham_2500"};
 		String[] spams = new String[] {"spam_400_a", "spam_460", "spam_400_b"};
-		String[] filenames = new String[] {"balanced", "undersampled", "oversampled"};
+		String[] filenames = new String[] {"knn/balanced", "knn/undersampled", "knn/oversampled"};
 		
 		for(int i = 0; i < filenames.length; i++) {
 			runKNN(hams[i], spams[i], filenames[i]);

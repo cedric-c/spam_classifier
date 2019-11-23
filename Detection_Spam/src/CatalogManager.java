@@ -23,6 +23,7 @@ public class CatalogManager {
 
     private HashMap<String, String> fileDirectories;
 
+    private ArrayList<String> spamFiles;
     
     public CatalogManager(int cas) {
     	if (cas == 1) {
@@ -100,6 +101,34 @@ public class CatalogManager {
      */
     public void addDirectory(String key, String path) {
         this.fileDirectories.put(key, path);
+    }
+    
+    /**
+     * Returns true if the provided email name is in the spam list. False otherwise.
+     * @param emailName
+     * @return
+     * @throws IOException
+     */
+    public boolean isSpam(String emailName) throws IOException {
+    	
+    	if(this.spamFiles == null)
+    		this.spamFiles = new ArrayList<String>();
+    	else
+    		return this.spamFiles.contains(emailName);
+    	
+    	
+        String path = this.fileDirectories.get("spam");
+        if(path == null)
+            throw new IOException("Path does not exist");
+
+        Path p = Paths.get(path);
+        
+        this.spamFiles = Files.list(p)
+        		.map(s -> s.getFileName().toString())
+        		.collect(Collectors.toCollection(ArrayList::new));
+        
+        return this.spamFiles.contains(emailName);
+        
     }
 
     /**
