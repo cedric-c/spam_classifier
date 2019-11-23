@@ -72,9 +72,8 @@ public class CatalogManager {
         this.addDirectory("ham", PATH_HAM);
         this.addDirectory("spam", PATH_SPAM);
         this.addDirectory("stopwords", PATH_ENG_STOPWORDS);
-<<<<<<< HEAD
+
         this.addDirectory("test", PATH_NON_CLASSIFIED); 
-=======
         this.addDirectory("test", PATH_NON_CLASSIFIED); //MODIFIER: ajouter le chemin pour les données test
         
         // Balanced data
@@ -92,7 +91,6 @@ public class CatalogManager {
         
         // (ham_400, spam_400_a), (ham_100, spam_460), (ham_2500, spam_400_b)
         
->>>>>>> 243d7e273c5c6ad079d20fda3262a5729a38578e
     }
 
     /**

@@ -127,11 +127,9 @@ public class main {
 	}
 	/*---------------------------------------------------------------------------------------*/
 	
-<<<<<<< HEAD
 	public static void main(String[] args) throws Exception {
 	
 		 //------------------------- NAIVE BAYES (3 cas: balancé, undersampling, oversampling) ------------------------
-=======
 	public static void runKNN(String mapKeyHam, String mapKeySpam, String saveFileName) throws Exception {
 		main a = new main();
 		
@@ -179,10 +177,7 @@ public class main {
   		
   		knn.exportCSV(saveFileName + "_" + time + ".csv");
   		System.out.println("FINI");
-	}
-	
-	public static void main(String[] args) throws Exception {
-		
+	}		
 		
 		String[] hams = new String[] {"ham_400", "ham_100", "ham_2500"};
 		String[] spams = new String[] {"spam_400_a", "spam_460", "spam_400_b"};
@@ -195,8 +190,7 @@ public class main {
   		//HashMap<Set, Double> distance = knn.getDistance();
   		//System.out.println(distance.size());
   		
-		
->>>>>>> 243d7e273c5c6ad079d20fda3262a5729a38578e
+	
 		/*
 		 * Cas 1: DossierA_Classe_Balancee
 		 * 		=> 400 hams, 400 spams, 80  courriels test
