@@ -81,6 +81,61 @@ def GetAverageCharactersPerPara(paragraphs):
     return length/len(paragraphs)
 
 
+def normalize(data):
+    return ""
+
+
+
+
+def get_min_max_std(list):
+    min = max = None
+
+    for v in list:
+        if (min == None or min > v):
+            min = v
+
+        if(max == None or max < v):
+            max = v
+
+    return (min, max)
+
+
+
+
+def get_column_values(data):
+    columns = data[0].keys()
+    values = {}
+
+    for col in columns:
+        values[col] = []
+
+    for row in data:
+        for col in columns:
+            values[col].append(row[col])
+
+    return values
+
+
+def normalize(data):
+
+    keys = data[0].keys()
+    all_values = get_column_values(data)
+
+    for record in data:
+        for column in keys:
+
+            if(column == 'class'):
+                continue
+
+            min, max = get_min_max_std(all_values[column])
+
+            nrmlz = lambda a : (a - min) / (max - min)
+            normalized = nrmlz(record[column])
+            record[column] = normalized
+            # print(record,'\nvalue is ',record[column], 'min max', min, max, 'normalized is', normalized);
+    return data
+
+
 # meta
 # . ^ $ * + ? { } [ ] \ | ( )
 def find_features(ham_or_spam, cls):
@@ -149,7 +204,7 @@ hello = ['12345', '12345', '']
 f_spam = find_features(spams, "spam")
 f_ham = find_features(hams, "ham")
 
-
+print(len(f_ham[:400]), len(f_spam[:400]))
 
 def WriteToFile(filename, data):
     with open(filename, 'w') as f:
@@ -161,12 +216,14 @@ def WriteToFile(filename, data):
 
 all_data = f_spam + f_ham
 
-random.shuffle(all_data)
-WriteToFile('featured_data.csv', all_data)
+sampled_data = f_spam[:400] + f_ham[:400]
+print(len(sampled_data))
 
-# with open(spamDir+"/0039.256602e2cb5a5b373bdd1fb631d9f452", 'r', encoding=iso) as o:
-#     print(o.encoding)
-#     contents = o.read();
-#     print(contents)
-#     print('\n\n\n\n','replaced','\n\n\n\n')
-#     print(contents.replace('<BR>', '\n'))
+random.shuffle(sampled_data)
+values = get_column_values(sampled_data)
+normalized_data = normalize(sampled_data)
+print(all_data)
+
+print(len(hams), len(spams))
+
+WriteToFile('featured_data_normalized_balanced.csv', all_data)
