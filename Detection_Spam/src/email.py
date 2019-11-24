@@ -226,4 +226,4 @@ print(all_data)
 
 print(len(hams), len(spams))
 
-WriteToFile('featured_data_normalized_balanced.csv', all_data)
+WriteToFile('featured_data_normalized_balanced_actual.csv', sampled_data)

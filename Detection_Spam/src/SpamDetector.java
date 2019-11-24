@@ -161,7 +161,7 @@ public class SpamDetector {
 		
 //		String link = "./src/data/iris/iris.csv";
 //		String link = "./src/featured_data.csv";
-		String link = "./src/featured_data_normalized_balanced.csv";
+		String link = "./src/featured_data_normalized_balanced_actual.csv";
 		
 		Double[] setSize = new Double[] {.9, .2, .3, .4, .5, .6, .7, .8, .1};
 		Integer[] KSize = new Integer[] {3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
@@ -189,7 +189,7 @@ public class SpamDetector {
 					sb.append("\n");
 					System.out.println(sum + " " + result.size());
 					try {
-						SimpleIO.appendStringToFile("./src/out/spam_or_ham_normalized_balanced.csv", sb.toString());						
+						SimpleIO.appendStringToFile("./src/out/spam_or_ham_normalized_balanced_actual.csv", sb.toString());						
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
