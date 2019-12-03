@@ -161,22 +161,24 @@ public class SpamDetector {
 		
 //		String link = "./src/data/iris/iris.csv";
 //		String link = "./src/featured_data.csv";
-		String link = "./src/featured_data_normalized_balanced_actual.csv";
-		
+		String link = "./src/featured__new_features_4.csv";
+		String file_prepend = "./src/out/t/knn_true/new_features_new_params4_";
+		String aggregatedStats = "./src/out/featured__new_features_new_params4.csv";
+		int samples = 10;
 		Double[] setSize = new Double[] {.9, .2, .3, .4, .5, .6, .7, .8, .1};
-		Integer[] KSize = new Integer[] {3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
+		Integer[] KSize = new Integer[] {2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20};
 		
 
 		
 		for(int i = 0; i < setSize.length; i++) {
-			for(int j = 0; j < 10; j++) {
+			for(int j = 0; j < samples; j++) {
 				for(int o : KSize) {
 					Double train = setSize[i];
 					Double test = setSize[setSize.length - i -1];
 					ArrayList<String[]> result = KNNIris(link, train, test, o);
 					String b64 = SimpleIO.toBase64(String.valueOf(System.nanoTime()));
 					String filename = b64 + ".csv";
-					writeTest("./src/out/t/knn_true/balanced_" + filename, result);
+					writeTest(file_prepend + filename, result);
 					int sum = result.stream()
 						.filter(s -> !s[0].equals("testno")) // remove the first row
 						.mapToInt(s -> Integer.parseInt(s[s.length-1])).sum();
@@ -189,7 +191,7 @@ public class SpamDetector {
 					sb.append("\n");
 					System.out.println(sum + " " + result.size());
 					try {
-						SimpleIO.appendStringToFile("./src/out/spam_or_ham_normalized_balanced_actual.csv", sb.toString());						
+						SimpleIO.appendStringToFile(aggregatedStats, sb.toString());						
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
