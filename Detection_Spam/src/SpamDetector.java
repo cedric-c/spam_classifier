@@ -161,9 +161,15 @@ public class SpamDetector {
 		
 //		String link = "./src/data/iris/iris.csv";
 //		String link = "./src/featured_data.csv";
-		String link = "./src/featured__new_features_4.csv";
-		String file_prepend = "./src/out/t/knn_true/new_features_new_params4_";
-		String aggregatedStats = "./src/out/featured__new_features_new_params4.csv";
+		///Users/ced/dev/spam_classifier/Detection_Spam/src/hamspam_lowerration-specialchars-links.csv
+		
+		
+		String test_name = "red";
+		
+		
+		String link = "./src/hamspam_"+test_name+".csv";
+		String file_prepend = "./src/out/t/knn_true/"+test_name+"_";
+		String aggregatedStats = "./src/out/results_"+test_name+".csv";
 		int samples = 10;
 		Double[] setSize = new Double[] {.9, .2, .3, .4, .5, .6, .7, .8, .1};
 		Integer[] KSize = new Integer[] {2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20};
