@@ -169,6 +169,10 @@ public class KNN {
 	 * @return
 	 */
 	public HashMap<String[], Double> getNeighbors(String[] X1, String[][] dataset, int K) {
+		/*
+		 * Inspirer de ce site web pour itérer à travers d'un hashmap
+		 * https://www.geeksforgeeks.org/traverse-through-a-hashmap-in-java/
+		 * */
         ArrayList<Double> distances = new ArrayList<Double>();
         HashMap<String[], Double> results = new HashMap<String[], Double>();
 		for(String[] xi : dataset) {
@@ -197,6 +201,10 @@ public class KNN {
 	public HashMap<String[], Double> getNeighbors(String[] X1, ArrayList<String[]> dataset, int K) {
 		ArrayList<Double> distances = new ArrayList<Double>();
 		HashMap<String[], Double> results = new HashMap<String[], Double>();
+		/*
+		 * Inspirer de ce site web pour itérer à travers d'un hashmap
+		 * https://www.geeksforgeeks.org/traverse-through-a-hashmap-in-java/
+		 * */
 		for(String[] xi : dataset) {
 			double d = this.distance(X1, xi);
 			results.put(xi, d);
@@ -219,6 +227,10 @@ public class KNN {
 	 * @return
 	 */
 	public KNN neighbors(String[] X1, ArrayList<String[]> dataset, int K) {
+		/*
+		 * Inspirer de ce site web pour itérer à travers d'un hashmap
+		 * https://www.geeksforgeeks.org/traverse-through-a-hashmap-in-java/
+		 * */
 		ArrayList<Double> distances = new ArrayList<Double>();
 		HashMap<String[], Double> results = new HashMap<String[], Double>();
 		for(String[] xi : dataset) {
@@ -243,6 +255,10 @@ public class KNN {
 	 * @return
 	 */
 	public String predict(String[] X1) {
+		/*
+		 * Inspirer de ce site web pour itérer à travers d'un hashmap
+		 * https://www.geeksforgeeks.org/traverse-through-a-hashmap-in-java/
+		 * */
 		int same = 0, different = 0;
 
 		int labelIndex = X1.length -1;

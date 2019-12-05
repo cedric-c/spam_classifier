@@ -61,6 +61,10 @@ public class NaiveBayes {
 		this.manager = manager;
 	}
 	
+	/*
+	 * Inspirer de ce site web pour itérer à travers d'un hashmap
+	 * https://www.geeksforgeeks.org/traverse-through-a-hashmap-in-java/
+	 * */
 	private double calculateProbability(ArrayList<String> test_tokens, HashMap<String, ArrayList<String>> invertedIndex, HashMap<String, ArrayList<String>> dictionnaire, boolean lissage) {
 		double posterior=0; //probabilité conditionnelle: P([token1 ET token2 ... ET tokenN]| classe)
 		int denominateur = dictionnaire.size(); //tous les courriels de cette classe
@@ -119,6 +123,10 @@ public class NaiveBayes {
 	
 	
 	//classifie les données de l'ensemble test avec la méthode Naive Bayes
+	/*
+	 * Inspirer de ce site web pour itérer à travers d'un hashmap
+	 * https://www.geeksforgeeks.org/traverse-through-a-hashmap-in-java/
+	 * */
 	public void classifierNB(boolean lissage) throws IOException {
 			
 		double prior_Spam = getPriors("spam"); //priori de la classe spam

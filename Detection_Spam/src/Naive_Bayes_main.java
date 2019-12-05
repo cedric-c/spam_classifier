@@ -48,10 +48,6 @@ public class Naive_Bayes_main {
 		return stemmer.stemWord(mot);
 	}
 	
-	public void normalisation() {
-		
-	}
-	
 	/*
 	 * String key: clé du hashMap invertedIndex (la clé est un mot/token)
 	 * HashMap<String, ArrayList<String>> invertedIndex: inverted index sous forme d'un hashMap. Variable globale statique défini dans cette classe
@@ -103,6 +99,10 @@ public class Naive_Bayes_main {
 		
 	}
 	
+	/*
+	 * Inspirer de ce site web pour itérer à travers d'un hashmap
+	 * https://www.geeksforgeeks.org/traverse-through-a-hashmap-in-java/
+	 * */
 	public void removeStopWord(HashMap<String, ArrayList<String>> hm) throws Exception {
 		
 		String courriel_ID; //get la clé (ID du courriel)
