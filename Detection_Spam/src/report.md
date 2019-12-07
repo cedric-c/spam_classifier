@@ -33,13 +33,14 @@ Détails de la mise-en-oeuvre:
 1. appeler la méthode classifierNB
 2. aller à travers de chaque courriel de l’ensemble test
 3. pour chaque courriel de l’ensemble test
-    4. appeler la méthode calculateProbability en passant en paramètre la chaîne de caractère “spam” qui retourne le posteriori d’un pourriel
-    4. appeler la méthode getPriors en passant en paramètre la chaîne de caractère “spam” qui retourne le priori d’un pourriel
-    4. multiplier le priori et le posteriori pour déterminer la probabilité que le courriel soit un pourriel
-    4. appeler la méthode calculateProbability en passant en paramètre la chaîne de caractère “ham” qui retourne le posteriori d’un courriel non-pourriel
-    4. appeler la méthode getPriors en passant en paramètre la chaîne de caractère “ham” qui retourne le priori d’un courriel non-pourriel
-    4. multiplier le priori et le posteriori pour déterminer la probabilité que le courriel ne soit pas un pourriel
-    4. prendre la plus grande probabilité entre les résultats obtenus aux étapes (c) et (g) et classifier le courriel. Si la probabilité est la même, classifier le courriel en tant que pourriel.
+    
+    1. appeler la méthode calculateProbability en passant en paramètre la chaîne de caractère “spam” qui retourne le posteriori d’un pourriel
+    1. appeler la méthode getPriors en passant en paramètre la chaîne de caractère “spam” qui retourne le priori d’un pourriel
+    1. multiplier le priori et le posteriori pour déterminer la probabilité que le courriel soit un pourriel
+    1. appeler la méthode calculateProbability en passant en paramètre la chaîne de caractère “ham” qui retourne le posteriori d’un courriel non-pourriel
+    1. appeler la méthode getPriors en passant en paramètre la chaîne de caractère “ham” qui retourne le priori d’un courriel non-pourriel
+    1. multiplier le priori et le posteriori pour déterminer la probabilité que le courriel ne soit pas un pourriel
+    1. prendre la plus grande probabilité entre les résultats obtenus aux étapes (c) et (g) et classifier le courriel. Si la probabilité est la même, classifier le courriel en tant que pourriel.
 
 
 Pour ce projet, nous avons voulu comparer les différents paramètres de lissage. Nous avons choisi les paramètres de lissage suivants: 
