@@ -1,4 +1,6 @@
-# spam_classifier
+# Spam Classifier
+
+End of year project for introductory course in artificial intelligence.
 
 ## Approach
 
